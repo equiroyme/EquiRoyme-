@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EquiRoyme</title>
+<meta name="description" content="Plateforme de vente, hébergement et transport de chevaux en France">
+<meta name="theme-color" content="#1E2430">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EquiRoyme">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--ink:#1E2430;--mute:#5E6470;--line:#E4E6EA;--line2:#C9CDD3;--soft:#F4F5F7;--soft2:#F1F2F4;--acc:#B4541F;--accSoft:#F6E6DC;--accInk:#8A3F14;--good:#1F5A3A;--goodSoft:#E1EFE6;--green:#2F6B4F;--map:#E9EFE4;--hay:#E3B341;--pen:#2A5BB8;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;background:#E9ECEF}
+body{font:15px/1.45 "Plus Jakarta Sans",system-ui,-apple-system,sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#app{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;position:relative;padding-bottom:84px;padding-top:env(safe-area-inset-top,0px)}
+.pad{padding:16px 18px}
+h1{font-size:26px;font-weight:800;margin:0;letter-spacing:-.01em}
+h2{font-size:18px;font-weight:800;margin:0}
+h3{font-size:15px;font-weight:800;margin:0}
+.mute{color:var(--mute)}.small{font-size:12px}.xs{font-size:11px}
+.row{display:flex;gap:8px;align-items:center}.wrap{flex-wrap:wrap}.col{display:flex;flex-direction:column}.g4{gap:4px}.g8{gap:8px}.g12{gap:12px}.g16{gap:16px}.g20{gap:20px}
+.between{justify-content:space-between}.f1{flex:1;min-width:0}
+.scrollx{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:12px;border:0;background:var(--acc);color:#fff;font-weight:700;text-decoration:none}
+.btn.dark{background:var(--ink)}.btn.line{background:#fff;color:var(--ink);border:1px solid var(--ink)}.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line2)}.btn.sm{min-height:36px;padding:0 12px;font-size:13px;border-radius:10px}.btn.block{width:100%}.btn.ok{background:var(--green)}.btn.off{background:#E4E6EA;color:#3A404C}
+.link{background:none;border:0;padding:0;min-height:40px;font-weight:700;text-decoration:underline;color:var(--ink)}
+.chip{flex:0 0 auto;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line2);background:#fff;font-size:13px;font-weight:700;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.seg{display:grid;border:1px solid var(--line2);border-radius:12px;overflow:hidden}
+.seg button{min-height:44px;border:0;background:#fff;font-size:13px;font-weight:700;padding:0 4px}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.fld{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line2);border-radius:12px;padding:8px 12px;background:#fff}
+.fld span{font-size:11px;font-weight:600;color:var(--mute)}
+.fld input,.fld select,.fld textarea{border:0;outline:0;background:transparent;font-size:15px;font-weight:600;padding:0;width:100%}
+.fld.soft{background:var(--soft);border-color:var(--soft)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}
+.tag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--soft2);color:#3A404C}
+.tag.acc{background:var(--accSoft);color:var(--accInk)}.tag.good{background:var(--goodSoft);color:var(--good)}.tag.warn{background:#FBEFD9;color:#7A4B0C}.tag.blue{background:#E6ECF7;color:#24406E}.tag.bad{background:#F7E3E3;color:#8A2424}.tag.hay{background:var(--hay);color:#2A2000}.tag.white{background:#fff;color:var(--ink)}
+.ph{border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5B5446;font-size:12px;font-weight:600;position:relative}
+.switch{flex-shrink:0;width:52px;height:32px;border-radius:999px;border:0;padding:3px;display:flex;align-items:center;background:#767C86}
+.switch::after{content:"";width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.switch[aria-checked=true]{background:var(--acc);justify-content:flex-end}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:76px;padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:20}
+.nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:600;color:var(--mute)}
+.nav button[aria-current=page]{color:var(--acc);font-weight:800}
+.nav svg{stroke:currentColor}
+.badge{position:absolute;top:8px;margin-left:18px;min-width:18px;height:18px;border-radius:9px;background:var(--acc);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:5}
+.icon{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.icon.soft{border:0;background:var(--soft2);width:40px;height:40px}
+.overlay{position:fixed;inset:0;background:rgba(30,36,48,.45);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:480px;max-height:92vh;background:#fff;border-radius:24px 24px 0 0;display:flex;flex-direction:column}
+.sheet .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+.sheet .bd{overflow-y:auto;padding:18px 20px 22px;display:flex;flex-direction:column;gap:20px}
+.sheet .bd>*{flex-shrink:0}
+.sheet .ft{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+.search{flex:1;display:flex;align-items:center;gap:12px;background:#fff;border:0;border-radius:999px;padding:11px 18px;box-shadow:0 4px 18px rgba(30,36,48,.16);text-align:left}
+.mapbox{position:relative;background:var(--map);border-radius:0 0 22px 22px;overflow:hidden}
+.mapbox svg.fr{display:block;width:100%;height:auto;margin:0 auto}
+.pin{cursor:pointer}
+.floating{position:absolute;display:flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--ink);color:#fff;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(30,36,48,.25)}
+.bigbtn{display:flex;align-items:center;gap:12px;min-height:64px;padding:10px 14px;border-radius:16px;border:1px solid var(--line);background:#fff;text-align:left;width:100%}
+.bigbtn .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--acc)}
+.bigbtn.acc{background:var(--acc);border-color:var(--acc);color:#fff}.bigbtn.acc .ic{background:rgba(255,255,255,.18)}
+.hcard{flex:0 0 200px;display:flex;flex-direction:column;gap:3px;border:0;background:none;padding:0;text-align:left}
+.heart{position:absolute;right:2px;top:2px;width:44px;height:44px;border:0;background:none;display:flex;align-items:center;justify-content:center}
+.bubble{max-width:80%;border-radius:16px;padding:10px 12px;font-size:14px;line-height:1.45}
+.bubble.me{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:4px}
+.bubble.them{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.bubble.sys{align-self:center;background:var(--soft2);color:#3A404C;font-size:12px;font-weight:600;border-radius:999px;padding:6px 12px}
+.listrow{display:flex;align-items:center;justify-content:space-between;min-height:52px;border:0;border-bottom:1px solid var(--soft2);background:none;padding:0;font-size:15px;font-weight:600;width:100%;text-align:left;text-decoration:none}
+.empty{border:1.5px dashed var(--line2);border-radius:14px;padding:22px;text-align:center;color:var(--mute);font-size:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:700;z-index:60;max-width:440px;width:calc(100% - 32px);text-align:center}
+.bottombar{position:fixed;left:50%;transform:translateX(-50%);bottom:76px;width:100%;max-width:480px;background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;z-index:15}
+.note{font-size:12px;color:var(--mute);line-height:1.45}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="live" class="sr" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ---------- Données d'exemple (reprises du prototype EquiRoyme) ---------- */
+var H=[
+{id:1,nom:"Quartz du Bois",cat:"Pro → Pro",prix:38000,age:7,taille:168,deb:1,epr:"Pro",sexe:"Hongre",loc:0,ville:"Fontainebleau (77)",race:"Selle Français",disc:"CSO",sp:1,anon:0},
+{id:2,nom:"Jolie Plume",cat:"Pro → Amateur",prix:14500,age:9,taille:162,deb:1,epr:"Amateur",sexe:"Jument",loc:0,ville:"Saumur (49)",race:"AQPS",disc:"Complet",sp:0,anon:0},
+{id:3,nom:"Tonnerre",cat:"Amateur → Amateur",prix:6500,age:12,taille:158,deb:1,epr:"Club",sexe:"Hongre",loc:0,ville:"Rodez (12)",race:"Anglo-arabe",disc:"Loisir",sp:0,anon:1},
+{id:4,nom:"Sirocco",cat:"Pro → Pro",prix:52000,age:6,taille:172,deb:1,epr:"Pro",sexe:"Étalon",loc:0,ville:"Deauville (14)",race:"Hanovrien",disc:"CSO",sp:0,anon:0},
+{id:5,nom:"Praline",cat:"Amateur → Amateur",prix:350,age:15,taille:148,deb:1,epr:"Club",sexe:"Jument",loc:1,ville:"Dax (40)",race:"Poney Welsh",disc:"Loisir",sp:0,anon:0},
+{id:6,nom:"Eclat de Lune",cat:"Pro → Amateur",prix:3900,age:3,taille:160,deb:0,epr:"Club",sexe:"Jument",loc:0,ville:"Vannes (56)",race:"Selle Français",disc:"Élevage",sp:0,anon:0},
+{id:7,nom:"Hector",cat:"Amateur → Amateur",prix:9800,age:10,taille:166,deb:1,epr:"Amateur",sexe:"Hongre",loc:0,ville:"Annecy (74)",race:"Holsteiner",disc:"Dressage",sp:1,anon:0},
+{id:8,nom:"Mirage",cat:"Pro → Amateur",prix:600,age:8,taille:164,deb:1,epr:"Amateur",sexe:"Jument",loc:1,ville:"Nantes (44)",race:"Selle Français",disc:"Dressage",sp:0,anon:1},
+{id:9,nom:"Caramel",cat:"Amateur → Amateur",prix:2200,age:11,taille:112,deb:1,epr:"Club",sexe:"Hongre",loc:0,ville:"Tours (37)",race:"Shetland",disc:"Loisir",sp:0,anon:0},
+{id:10,nom:"Noisette",cat:"Pro → Amateur",prix:4800,age:5,taille:122,deb:1,epr:"Club",sexe:"Jument",loc:0,ville:"Lyon (69)",race:"Poney français de selle",disc:"CSO",sp:0,anon:0},
+{id:11,nom:"Ouragan",cat:"Amateur → Amateur",prix:12500,age:9,taille:166,deb:1,epr:"Amateur",sexe:"Hongre",loc:0,ville:"Montpellier (34)",race:"Selle Français",disc:"Endurance",sp:0,anon:0}];
+var ECU={1:"Écurie des Tilleuls",2:"Haras de la Loire",3:"Centre équestre du Causse",4:"Haras du Pays d’Auge",5:"Ranch des Landes",6:"Écurie du Golfe",7:"Domaine des Lacs",8:"Poney-club de l’Erdre",9:"Écurie de Touraine",10:"Écurie des Monts d’Or",11:"Haras de la Mosson"};
+var CITIES={"Paris":[48.86,2.35],"Lyon":[45.76,4.84],"Marseille":[43.30,5.37],"Bordeaux":[44.84,-0.58],"Toulouse":[43.60,1.44],"Nantes":[47.22,-1.55],"Lille":[50.63,3.06],"Strasbourg":[48.58,7.75],"Rennes":[48.11,-1.68],"Montpellier":[43.61,3.88],"Tours":[47.39,0.69],"Pau":[43.30,-0.37]};
+var COORD={1:[48.40,2.70],2:[47.26,-0.08],3:[44.35,2.57],4:[49.35,0.07],5:[43.71,-1.05],6:[47.66,-2.76],7:[45.90,6.13],8:[47.22,-1.55],9:[47.39,0.69],10:[45.76,4.84],11:[43.61,3.88]};
+var FR=[[2.4,51.05],[3.1,50.8],[4.0,50.35],[4.8,50.1],[5.8,49.5],[6.4,49.45],[7.6,49.05],[8.2,48.97],[7.6,48.0],[7.6,47.6],[6.9,47.35],[6.1,46.4],[6.8,46.0],[7.1,45.3],[6.7,44.9],[7.0,44.2],[7.5,43.8],[6.5,43.1],[5.4,43.2],[4.8,43.4],[4.0,43.5],[3.1,43.1],[3.0,42.5],[1.7,42.5],[0.7,42.8],[-0.5,42.8],[-1.8,43.35],[-1.3,44.5],[-1.2,45.5],[-1.15,46.15],[-2.2,47.0],[-2.5,47.3],[-4.2,47.8],[-4.8,48.4],[-3.5,48.8],[-1.6,48.65],[-1.6,49.4],[-1.2,49.7],[-0.2,49.3],[0.1,49.5],[1.1,49.9],[1.6,50.3]];
+var CORSE=[[8.6,42.3],[9.35,43.0],[9.55,42.2],[9.1,41.4],[8.6,41.9]];
+var PL={paille:"Box paille",copeaux:"Box copeaux",foin:"Box foin compris",pre:"Pré"};
+var PENS=[{id:1,nom:"Écurie du Pic",ville:"Pau (64)",c:[43.31,-0.36],pr:{paille:22,copeaux:26,foin:32,pre:14}},{id:2,nom:"Domaine des Garrigues",ville:"Montpellier (34)",c:[43.65,3.85],pr:{copeaux:28,foin:36,pre:16}},{id:3,nom:"Haras du Médoc",ville:"Bordeaux (33)",c:[44.9,-0.6],pr:{paille:20,copeaux:25,pre:13}},{id:4,nom:"Ranch des Corbières",ville:"Carcassonne (11)",c:[43.2,2.35],pr:{paille:21,foin:30,pre:12}},{id:5,nom:"Écurie de la Garonne",ville:"Toulouse (31)",c:[43.55,1.4],pr:{paille:23,copeaux:27,foin:34,pre:15}},{id:6,nom:"Pension des Alpilles",ville:"Avignon (84)",c:[43.9,4.8],pr:{copeaux:30,foin:38,pre:17}},{id:7,nom:"Haras de Loire",ville:"Saumur (49)",c:[47.25,-0.1],pr:{paille:19,copeaux:24,foin:31}},{id:8,nom:"Écurie du Vexin",ville:"Rouen (76)",c:[49.45,1.1],pr:{paille:24,copeaux:29,foin:35,pre:15}}];
+var CARRIERS=[{id:1,nom:"Transporteur A (exemple)",veh:"Camion · 4 places"},{id:2,nom:"Transporteur B (exemple)",veh:"Van · 2 places"},{id:3,nom:"Transporteur C (exemple)",veh:"Camion · 6 places"}];
+var MED=[["Radios","12 clichés (2025)"],["Visite vétérinaire","Vaccins à jour · aucun problème signalé"],["Ostéopathe","Dernier passage en mars"],["Dentiste","Fait en janvier"]];
+var DISC=["CSO","Dressage","Complet","Endurance","Loisir","Attelage","Western","Élevage"];
+var RACES=["Selle Français","AQPS","Anglo-arabe","Hanovrien","Holsteiner","Poney Welsh","Poney français de selle","Shetland","Pur-sang","KWPN","Lusitanien","Frison","Autre"];
+var TAILLES=[["","Toutes les tailles"],["0-107","Poney A (jusqu’à 1,07 m)"],["108-117","Poney B (1,08 à 1,17 m)"],["118-127","Poney C (1,18 à 1,27 m)"],["128-148","Poney D (1,28 à 1,48 m)"],["149-159","Cheval 1,49 à 1,59 m"],["160-169","Cheval 1,60 à 1,69 m"],["170-250","Cheval 1,70 m et plus"]];
+var URL_DOC={vente:"https://claude.ai/artifact/HZRaPBowTTaE1GaymooZPt",transport:"https://claude.ai/artifact/KyM19EkRRC433tkBqahxu3",pension:"https://claude.ai/artifact/SohTodsZJjYtNEALEySN9z",legal:"https://claude.ai/artifact/MYG9TRkQT5R4xHUuqXnKgt"};
+
+/* ---------- État ---------- */
+var KEY="equiroyme-proto-v2";
+function freshFilters(){return{type:"vente",cat:"",disc:[],race:"",sexe:"",deb:"",epr:"",ageMin:"",ageMax:"",taille:"",prixMin:"",prixMax:"",ville:"",ray:""}}
+function freshState(){return{view:"accueil",hist:[],horse:null,media:0,overlay:null,premium:false,favs:[],f:freshFilters(),mapCat:"tout",sort:"pert",route:null,trip:{from:"",to:"",detour:""},tour:[],TC:"Pau",TD:new Date().toISOString().slice(0,10),TT:"08:00",TO:"near",KM:0.35,alerts:[],ch:{push:true,mail:true},favTab:"chevaux",convs:[{id:1,kind:"achat",title:"Haras de la Loire",horse:2,unread:true,msgs:[{who:"them",t:"Bonjour, Jolie Plume est toujours disponible. N’hésitez pas si vous avez des questions."}]}],conv:null,msgTab:"tous",draft:"",verified:false,anonDef:false,phone:true,plan:"acheteur",period:"mois",mine:[],seen:false,goal:"acheter",pf:[],etape:null,et:{presta:null,n:1,nights:1},tr:{from:"",to:"",n:1,asked:[]},dep:freshDep(),geo:null,reviewed:[],offers:seedOffers(),booked:[],offerId:null,prop:freshProp()}}
+function dIn(n){var d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
+function seedOffers(){return[{id:1,who:"Particulier (exemple)",from:"Nantes",to:"Lyon",date:dIn(3),places:2,veh:"Van · 2 places",prix:"",note:"Retour à vide après un concours."},{id:2,who:"Écurie (exemple)",from:"Bordeaux",to:"Paris",date:dIn(6),places:3,veh:"Camion · 6 places",prix:"",note:""},{id:3,who:"Particulier (exemple)",from:"Toulouse",to:"Montpellier",date:dIn(9),places:1,veh:"Van · 2 places",prix:"",note:"Arrêt possible en route."}]}
+function freshProp(){return{from:"",to:"",date:"",places:1,veh:"Van",prix:"",note:""}}
+function freshDep(){return{nom:"",race:"",age:"",taille:"",sexe:"",disc:[],cat:"",loc:0,niveau:"",desc:"",pmode:"debattre",prix:"",ville:"",anon:null,docs:{},une:false,photos:0,videos:0}}
+var S=freshState();
+try{var saved=JSON.parse(localStorage.getItem(KEY)||"null");if(saved){S=Object.assign(S,saved);S.overlay=null;S.conv=null}}catch(e){}
+if(S.view==="auth")S.view="accueil";if(!S.offers)S.offers=seedOffers();if(!S.booked)S.booked=[];if(!S.prop)S.prop=freshProp();
+(S.mine||[]).forEach(function(m){if(!H.some(function(h){return h.id===m.h.id})){H.push(m.h);if(m.c)COORD[m.h.id]=m.c;ECU[m.h.id]="Mon écurie"}});
+function save(){try{var o=Object.assign({},S);delete o.overlay;delete o._toast;delete o._tt;delete o._ov;localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+
+/* ---------- Outils ---------- */
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+var eur=function(n){return Math.round(n).toLocaleString("fr-FR")+" €"};
+function byId(id){return H.filter(function(x){return x.id===id})[0]}
+function hv(a,b){var q=Math.PI/180,x=Math.pow(Math.sin((b[0]-a[0])*q/2),2)+Math.cos(a[0]*q)*Math.cos(b[0]*q)*Math.pow(Math.sin((b[1]-a[1])*q/2),2);return 12742*Math.asin(Math.sqrt(x))}
+function road(a,b){return Math.round(hv(a,b)*1.25)}
+function drive(a,b){return Math.round(hv(a,b)*1.25/90*60)}
+function hm(t){t=Math.round(t);return String(Math.floor(t/60)%24).padStart(2,"0")+"h"+String(t%60).padStart(2,"0")}
+function dur(t){return Math.floor(t/60)+"h"+String(t%60).padStart(2,"0")}
+function xy(c){return[(c[1]+5.5)*41.4,(51.5-c[0])*60]} /* c = [lat, lon] */
+function poly(a){return a.map(function(p){return((p[0]+5.5)*41.4).toFixed(1)+","+((51.5-p[1])*60).toFixed(1)}).join(" ")}
+function cl(h){var t=h.taille;if(!t)return"";return t<=107?"Poney A":t<=117?"Poney B":t<=127?"Poney C":t<=148?"Poney D":"Cheval"}
+function price(h){if(h.prix==null||h.prix==="")return"Prix sur demande";return eur(h.prix)+(h.loc?" / mois":"")}
+function origin(){if(S.f.ville&&CITIES[S.f.ville])return CITIES[S.f.ville];return S.geo}
+function dist(h){var o=origin();return o&&COORD[h.id]?hv(o,COORD[h.id]):null}
+function tint(id){return["#E7E1D6","#DCE6D6","#E3E1EA","#E9E4D8","#DDE5EC"][id%5]}
+function toast(m){S._toast=m;$("#live").textContent=m;clearTimeout(S._tt);S._tt=setTimeout(function(){S._toast=null;var t=$(".toast");if(t)t.remove()},2600)}
+var IC={
+ search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+ heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+ map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>',
+ msg:'<path d="M4 5h16v11H9l-5 4z"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+ close:'<path d="M6 6l12 12M18 6L6 18"/>',back:'<path d="M15 5l-7 7 7 7"/>',chev:'<path d="M9 5l7 7-7 7"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',route:'<path d="M5 19c4 0 4-14 8-14s4 14 6 14"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>',
+ list:'<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+ doc:'<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h4"/>',shield:'<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/>',
+ truck:'<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',home:'<path d="M3 11l9-7 9 7v9H3z"/><path d="M10 20v-5h4v5"/>',
+ bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+ filter:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',play:'<path d="M8 5v14l11-7z"/>',send:'<path d="M4 12l16-8-6 16-2-6z"/>',check:'<path d="M5 12l5 5 9-10"/>',locate:'<path d="M3 11l18-8-8 18-2-8z"/>',share:'<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',cam:'<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>',video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>'};
+function ic(n,sz,col,sw,fill){return'<svg aria-hidden="true" width="'+(sz||20)+'" height="'+(sz||20)+'" viewBox="0 0 24 24" fill="'+(fill||"none")+'" stroke="'+(col||"currentColor")+'" stroke-width="'+(sw||2)+'" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>'}
+function A(act,extra){return' data-act="'+act+'"'+(extra?' data-v="'+esc(extra)+'"':'')}
+function sw(on,act,label){return'<button type="button" role="switch" class="switch" aria-checked="'+(!!on)+'" aria-label="'+esc(label)+'"'+A(act)+'></button>'}
+function seg(opts,cur,act,cols){return'<div class="seg" style="grid-template-columns:repeat('+(cols||opts.length)+',minmax(0,1fr))">'+opts.map(function(o){return'<button type="button" aria-pressed="'+(cur===o[0])+'"'+A(act,o[0])+'>'+o[1]+'</button>'}).join("")+'</div>'}
+function closeBtn(act,label){return'<button type="button" class="icon soft" aria-label="'+(label||"Fermer")+'"'+A(act||"close")+'>'+ic("close",16,"#1E2430",2.6)+'</button>'}
+function sheetHead(t,act){return'<div class="hd"><span style="width:40px"></span><h2 style="font-size:17px">'+t+'</h2>'+closeBtn(act)+'</div>'}
+
+/* ---------- Filtres & résultats ---------- */
+function fCount(){var f=S.f,n=0;["cat","race","sexe","deb","epr","ageMin","ageMax","taille","prixMin","prixMax","ray"].forEach(function(k){if(f[k]!=="")n++});n+=f.disc.length;if(f.type!=="vente")n++;return n}
+function matches(h){var f=S.f;
+ if(f.type==="vente"&&h.loc)return false;if(f.type==="location"&&!h.loc)return false;
+ if(f.cat&&h.cat!==f.cat)return false;if(f.disc.length&&f.disc.indexOf(h.disc)<0)return false;if(f.race&&h.race!==f.race)return false;
+ if(f.sexe&&h.sexe!==f.sexe)return false;if(f.deb!==""&&h.deb!==+f.deb)return false;
+ if(f.epr){var o=["Club","Amateur","Pro"];if(o.indexOf(h.epr)>o.indexOf(f.epr))return false}
+ if(f.ageMin!==""&&!(h.age>=+f.ageMin))return false;if(f.ageMax!==""&&!(h.age<=+f.ageMax))return false;
+ if(f.taille){var t=f.taille.split("-");if(!(h.taille>=+t[0]&&h.taille<=+t[1]))return false}
+ if(f.prixMin!==""&&!(h.prix>=+f.prixMin))return false;if(f.prixMax!==""&&!(h.prix<=+f.prixMax))return false;
+ if(f.ray!==""&&origin()){var d=dist(h);if(d==null||d>+f.ray)return false}
+ if(S.route&&!onRoute(h))return false;
+ return true}
+function km2(c,lat0){return[c[1]*111.32*Math.cos(lat0*Math.PI/180),c[0]*110.57]}
+function segDist(p,a,b){var l=(a[0]+b[0])/2,P=km2(p,l),A1=km2(a,l),B=km2(b,l),dx=B[0]-A1[0],dy=B[1]-A1[1],L=dx*dx+dy*dy,t=L?Math.max(0,Math.min(1,((P[0]-A1[0])*dx+(P[1]-A1[1])*dy)/L)):0,x=A1[0]+t*dx-P[0],y=A1[1]+t*dy-P[1];return Math.sqrt(x*x+y*y)}
+function routePts(){if(!S.route)return null;var a=S.route.from==="__geo"?S.geo:CITIES[S.route.from],b=CITIES[S.route.to];return a&&b?[a,b]:null}
+function detour(){return S.route&&S.route.detour!==""?+S.route.detour:20}
+function onRoute(h){var r=routePts();if(!r||!COORD[h.id])return false;return segDist(COORD[h.id],r[0],r[1])<=detour()}
+function results(){var r=H.filter(matches);var s=S.sort;
+ r.sort(function(a,b){if(s==="dist"){var da=dist(a),db=dist(b);return(da==null?1e9:da)-(db==null?1e9:db)}if(s==="pasc")return(a.prix||0)-(b.prix||0);if(s==="pdesc")return(b.prix||0)-(a.prix||0);if(s==="new")return b.id-a.id;return(b.sp-a.sp)||(a.id-b.id)});return r}
+
+/* ---------- Carte ---------- */
+function franceSvg(inner,label,h){return'<svg class="fr" viewBox="0 0 580 630" role="group" aria-label="'+label+'" style="max-height:'+(h||360)+'px"><polygon points="'+poly(FR)+'" fill="#F7F9F4" stroke="#C9D6C0" stroke-width="2" stroke-linejoin="round"/><polygon points="'+poly(CORSE)+'" fill="#F7F9F4" stroke="#C9D6C0" stroke-width="2"/>'+inner+'</svg>'}
+function homeMap(){var g="",r=routePts();
+ if(r){var a=xy(r[0]),b=xy(r[1]);g+='<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#B4541F" stroke-width="5" stroke-dasharray="3 10" stroke-linecap="round"/><rect x="'+(a[0]-8)+'" y="'+(a[1]-8)+'" width="16" height="16" transform="rotate(45 '+a[0]+' '+a[1]+')" fill="#1E2430" stroke="#fff" stroke-width="2"/><circle cx="'+b[0]+'" cy="'+b[1]+'" r="9" fill="#B4541F" stroke="#fff" stroke-width="3"/>'}
+ var o=origin();if(o&&!r){var p=xy(o);if(S.f.ray!=="")g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(+S.f.ray*60/111)+'" fill="#B4541F" fill-opacity=".06" stroke="#B4541F" stroke-dasharray="6 5" stroke-width="2"/>';g+='<rect x="'+(p[0]-7)+'" y="'+(p[1]-7)+'" width="14" height="14" transform="rotate(45 '+p[0]+' '+p[1]+')" fill="#1E2430" stroke="#fff" stroke-width="2"><title>Ma position</title></rect>'}
+ var mc=S.mapCat;
+ if(mc==="tout"||mc==="etapes")PENS.filter(pensOk).forEach(function(p){var q=xy(p.c);g+='<g class="pin" tabindex="0" role="button" aria-label="Écurie étape '+esc(p.nom)+', '+esc(p.ville)+'"'+A("etape",p.id)+'><circle cx="'+q[0]+'" cy="'+q[1]+'" r="20" fill="transparent"/><rect x="'+(q[0]-9)+'" y="'+(q[1]-9)+'" width="18" height="18" rx="4" fill="#2F6B4F" stroke="#fff" stroke-width="2.5"/></g>'});
+ if(mc==="transport")S.offers.forEach(function(o){var a=xy(CITIES[o.from]),b=xy(CITIES[o.to]);g+='<g class="pin" tabindex="0" role="button" aria-label="Transport proposé : '+esc(o.from)+' vers '+esc(o.to)+', '+o.places+' place'+(o.places>1?"s":"")+'"'+A("offer",o.id)+'><line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="transparent" stroke-width="22"/><line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="#2A5BB8" stroke-width="4" stroke-dasharray="10 6" stroke-linecap="round"/><circle cx="'+b[0]+'" cy="'+b[1]+'" r="7" fill="#2A5BB8" stroke="#fff" stroke-width="2"/><circle cx="'+a[0]+'" cy="'+a[1]+'" r="13" fill="#2A5BB8" stroke="#fff" stroke-width="3"/><text x="'+a[0]+'" y="'+(a[1]+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#fff">'+o.places+'</text></g>'});
+ if(mc!=="etapes"&&mc!=="transport"){var keepT=S.f.type;if(mc==="vente")S.f.type="vente";if(mc==="location")S.f.type="location";if(mc==="tout"&&keepT==="vente"&&!fCount())S.f.type="tous";
+  results().forEach(function(h){if(!COORD[h.id])return;var q=xy(COORD[h.id]),big=h.sp?12:9;g+='<g class="pin" tabindex="0" role="button" aria-label="'+esc(h.nom)+', '+price(h)+', '+esc(h.ville)+'"'+A("horse",h.id)+'><circle cx="'+q[0]+'" cy="'+q[1]+'" r="20" fill="transparent"/><circle cx="'+q[0]+'" cy="'+q[1]+'" r="'+big+'" fill="'+(h.loc?"#E3B341":"#1E2430")+'" stroke="'+(h.sp?"#B4541F":"#fff")+'" stroke-width="3"/></g>'});
+  S.f.type=keepT}
+ return franceSvg(g,"Carte des annonces et écuries étapes",400)}
+function pensOk(p){return S.pf.every(function(k){return p.pr[k]!=null})}
+function minp(p){return Math.min.apply(null,Object.keys(p.pr).map(function(k){return p.pr[k]}))}
+
+/* ---------- Vues ---------- */
+function nav(){var cur={accueil:"accueil",resultats:"accueil",annonce:"accueil",depot:"accueil",etapes:"accueil",transport:"accueil",tournee:"tournee",messages:"messages",favoris:"favoris",profil:"profil",premium:"profil"}[S.view];
+ var unread=S.convs.filter(function(c){return c.unread}).length;
+ var it=[["accueil","Explorer","search"],["favoris","Favoris","heart"],["tournee","Mes trajets","map"],["messages","Messages","msg"],["profil","Profil","user"]];
+ return'<nav class="nav" aria-label="Navigation principale">'+it.map(function(t){return'<button type="button"'+(cur===t[0]?' aria-current="page"':'')+A("go",t[0])+'>'+ic(t[2],24)+t[1]+(t[0]==="messages"&&unread?'<span class="badge">'+unread+'</span>':'')+(t[0]==="tournee"&&S.tour.length?'<span class="badge">'+S.tour.length+'</span>':'')+'</button>'}).join("")+'</nav>'}
+
+function vAccueil(){var n=fCount(),r=routePts(),sp=H.filter(function(h){return h.sp}),res=results().length;
+ var chips=[["tout","Tout voir"],["vente","Chevaux à vendre"],["transport","Transport"],["etapes","Écuries étapes"]];
+ return'<div class="mapbox"><div style="position:absolute;left:14px;right:14px;top:14px;display:flex;flex-direction:column;gap:10px;z-index:2">'+
+ '<button type="button" class="search"'+A("open","filtres")+'>'+ic("search",20,"#1E2430",2.2)+'<span class="col"><b style="font-size:15px">Que cherchez-vous ?</b><span class="small mute">'+(n?n+" filtre"+(n>1?"s":"")+" actif"+(n>1?"s":"")+" · ":"")+'Discipline · Race · Âge · Prix…</span></span></button>'+
+ '<div class="scrollx" role="group" aria-label="Afficher sur la carte">'+chips.map(function(c){return'<button type="button" class="chip" style="box-shadow:0 2px 8px rgba(30,36,48,.12)" aria-pressed="'+(S.mapCat===c[0])+'"'+A("mapcat",c[0])+'>'+c[1]+'</button>'}).join("")+'</div></div>'+
+ '<div style="padding-top:110px">'+homeMap()+'</div>'+
+ '<button type="button" class="floating" style="left:14px;bottom:14px"'+A("go","resultats")+'>'+ic("list",16,"#fff",2.4)+'Liste ('+res+')</button>'+
+ '<button type="button" class="floating" style="right:14px;bottom:14px;background:#fff;color:#1E2430" aria-label="Me localiser"'+A("geo")+'>'+ic("locate",18,"#1E2430")+'</button></div>'+
+ '<div class="pad col g16">'+
+ (r?'<div class="card row g12" style="background:var(--accSoft);border-color:var(--accSoft)">'+ic("route",22,"#8A3F14")+'<span class="f1 col"><b>Sur ma route : '+esc(S.route.from==="__geo"?"Ma position":S.route.from)+' → '+esc(S.route.to)+'</b><span class="small" style="color:#5C3A22">'+res+' cheva'+(res>1?"ux":"l")+' à moins de '+detour()+' km de détour</span></span><button type="button" class="btn sm ghost"'+A("clearroute")+'>Effacer</button></div>':'')+
+ (S.mapCat==="transport"?transportBlock():'')+'<button type="button" class="bigbtn acc"'+A("go","depot")+'><span class="ic">'+ic("plus",22,"#fff",2.4)+'</span><span class="f1 col"><b style="font-size:16px">Déposer une annonce</b><span class="small">Vendre ou louer un cheval · photos, vidéos, documents</span></span>'+ic("chev",18,"#fff",2.4)+'</button>'+
+ '<button type="button" class="bigbtn"'+A("open","trajet")+'><span class="ic">'+ic("route",22,"#fff",2.2)+'</span><span class="f1 col"><b style="font-size:16px">Prévoir mon trajet</b><span class="small mute">Voir les chevaux à vendre sur ma route</span></span>'+ic("chev",18,"#1E2430",2.4)+'</button>'+
+ '<div class="row between"><div class="col"><h2>Chevaux à la une</h2><span class="small mute">Annonces premium sponsorisées</span></div></div>'+
+ '<div class="scrollx">'+sp.map(hCard).join("")+'</div>'+
+ '<div class="row between"><div class="col"><h2>Écuries étapes</h2><span class="small mute">Une nuit pour vos chevaux sur la route</span></div><button type="button" class="icon soft" aria-label="Voir toutes les écuries étapes"'+A("go","etapes")+'>'+ic("arrow",16,"#1E2430",2.4)+'</button></div>'+
+ '<div class="scrollx">'+PENS.slice(0,4).map(function(p){return'<button type="button" class="hcard"'+A("etape",p.id)+'><span class="ph" style="height:100px;background:'+tint(p.id)+'">Photo de l’écurie</span><b style="margin-top:4px">'+esc(p.nom)+'</b><span class="small mute">'+esc(p.ville)+' · '+Object.keys(p.pr).map(function(k){return PL[k]}).slice(0,2).join(" · ")+'</span><b>dès '+eur(minp(p))+' / nuit</b></button>'}).join("")+'</div>'+
+ '<p class="note">Prototype EquiRoyme : chevaux, écuries et données sont des exemples. La carte est simplifiée.</p></div>'}
+function hCard(h){var fav=S.favs.indexOf(h.id)>-1;return'<div class="hcard"><div class="ph" style="height:110px;background:'+tint(h.id)+'"><button type="button" class="ph" style="position:absolute;inset:0;border:0;background:none;width:100%"'+A("horse",h.id)+' aria-label="Voir '+esc(h.nom)+'">Photo du cheval</button>'+(h.sp?'<span class="tag white" style="position:absolute;left:8px;top:8px">Sponsorisé</span>':'')+'<button type="button" class="heart" aria-label="'+(fav?"Retirer des favoris":"Ajouter aux favoris")+'" aria-pressed="'+fav+'"'+A("fav",h.id)+'>'+ic("heart",24,"#fff",2,fav?"#B4541F":"rgba(30,36,48,.35)")+'</button></div><button type="button" class="col g4" style="border:0;background:none;padding:0;text-align:left"'+A("horse",h.id)+'><b style="margin-top:4px">'+esc(h.nom)+'</b><span class="small mute">'+esc(h.race||"")+' · '+(h.age?h.age+" ans · ":"")+esc(h.disc||"")+'</span><b>'+price(h)+'</b></button></div>'}
+
+function offerDate(o){return o.date?new Date(o.date+"T12:00").toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"short"}):"Date à convenir"}
+function offerCard(o){var mine=o.mine,bk=S.booked.indexOf(o.id)>-1;return'<button type="button" class="card col g4" style="text-align:left;width:100%"'+A("offer",o.id)+'><span class="row between"><b>'+esc(o.from)+' → '+esc(o.to)+'</b><span class="tag blue">'+o.places+' place'+(o.places>1?"s":"")+'</span></span><span class="small mute">'+offerDate(o)+' · '+esc(o.veh)+' · '+road(CITIES[o.from],CITIES[o.to])+' km</span><span class="small" style="color:#3A404C">'+(mine?"Mon trajet":esc(o.who))+(bk?' · <b style="color:var(--good)">Place demandée</b>':'')+'</span></button>'}
+function transportBlock(){return'<div class="col g12" style="background:#E6ECF7;border-radius:16px;padding:14px"><div class="row between"><span class="col"><b>Transports proposés</b><span class="small" style="color:#24406E">Des trajets avec des places libres pour vos chevaux</span></span></div>'+S.offers.slice().reverse().map(offerCard).join("")+'<button type="button" class="btn" style="background:#2A5BB8"'+A("open","proposer")+'>'+ic("plus",18,"#fff",2.4)+'Proposer un transport</button></div>'}
+function vResultats(){var r=results(),sorts=[["pert","Pertinence"],["dist","Plus proches"],["pasc","Prix croissant"],["pdesc","Prix décroissant"],["new","Plus récentes"]];
+ return'<div class="top"><button type="button" class="icon" aria-label="Retour à la carte"'+A("back")+'>'+ic("back",18,"#1E2430",2.4)+'</button><button type="button" class="search" style="padding:8px 16px"'+A("open","filtres")+'><span class="col"><b style="font-size:14px">'+(S.f.type==="location"?"Chevaux à louer":S.f.type==="tous"?"Achat et location":"Chevaux à vendre")+'</b><span class="small mute">'+fCount()+' filtre'+(fCount()>1?"s":"")+(S.route?" · sur ma route":"")+(origin()&&S.f.ray?" · "+S.f.ray+" km":"")+'</span></span></button></div>'+
+ '<div class="pad col g16"><div class="scrollx">'+sorts.map(function(s){return'<button type="button" class="chip" aria-pressed="'+(S.sort===s[0])+'"'+A("sort",s[0])+'>'+s[1]+'</button>'}).join("")+'</div>'+
+ (S.sort==="dist"&&!origin()?'<p class="note">Choisissez votre ville dans les filtres ou touchez « Me localiser » sur la carte pour trier par distance.</p>':'')+
+ '<div class="row between"><b>'+r.length+' annonce'+(r.length>1?"s":"")+'</b><button type="button" class="btn sm ghost"'+A("savealert")+'>'+ic("bell",16,"#1E2430")+'Créer une alerte</button></div>'+
+ (r.length?r.map(function(h){var fav=S.favs.indexOf(h.id)>-1,d=dist(h);return'<div class="col g4"><div class="ph" style="height:190px;border-radius:16px;background:'+tint(h.id)+'"><button type="button" class="ph" style="position:absolute;inset:0;border:0;background:none;width:100%;border-radius:16px"'+A("horse",h.id)+' aria-label="Voir '+esc(h.nom)+'">Photo du cheval</button><span class="row" style="position:absolute;left:10px;top:10px;gap:6px">'+(h.sp?'<span class="tag white">Sponsorisé</span>':'')+(h.loc?'<span class="tag hay">Location</span>':'')+'</span><button type="button" class="heart" aria-label="'+(fav?"Retirer des favoris":"Ajouter aux favoris")+'" aria-pressed="'+fav+'"'+A("fav",h.id)+'>'+ic("heart",24,"#fff",2,fav?"#B4541F":"rgba(30,36,48,.35)")+'</button></div><button type="button" class="col g4" style="border:0;background:none;padding:0;text-align:left;margin-top:4px"'+A("horse",h.id)+'><span class="row between"><b>'+esc(h.nom)+' · '+esc(h.ville)+'</b>'+(d!=null?'<span class="small mute">'+Math.round(d)+' km</span>':'')+'</span><span class="small mute">'+esc(h.race||"")+' · '+(h.age?h.age+" ans · ":"")+esc(h.sexe||"")+' · '+esc(h.disc||"")+' · '+esc(h.cat||"")+'</span><span class="row g8"><b>'+price(h)+'</b>'+(!h.anon?'<span class="small" style="color:var(--good);font-weight:700">'+ic("shield",13,"#1F5A3A",2.8)+' Vendeur vérifié</span>':'')+'</span></button></div>'}).join(""):'<div class="empty">Aucune annonce ne correspond. Élargissez vos filtres'+(S.route?" ou augmentez le détour":"")+'.</div>')+'</div>'}
+
+function vAnnonce(){var h=byId(S.horse);if(!h)return vAccueil();var fav=S.favs.indexOf(h.id)>-1,m=S.media,items=["Photo 1","Photo 2","Photo 3","Photo 4","Vidéo 1","Vidéo 2"],isV=m>=4,inT=S.tour.some(function(t){return t.id===h.id}),d=dist(h);
+ var info=[["Race",h.race],["Âge",h.age?h.age+" ans":""],["Sexe",h.sexe],["Taille",h.taille?h.taille+" cm · "+cl(h):""],["Discipline",h.disc],["Niveau",h.epr],["Catégorie",h.cat],["Débourrage",h.deb==null?"":h.deb?"Débourré":"Non débourré"]].filter(function(x){return x[1]});
+ var docs=h.docs||MED.map(function(x){return{t:x[0],s:x[1],pub:1}}).concat([{t:"Papiers SIRE",s:"Document d’identification",pub:0}]);
+ return'<div style="position:relative;height:300px;background:'+(isV?"#2E3440":tint(h.id+m))+';display:flex;align-items:center;justify-content:center">'+
+ (isV?'<button type="button" aria-label="Lire la vidéo" style="width:68px;height:68px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center">'+ic("play",26,"#1E2430",1,"#1E2430")+'</button>':'')+
+ '<span style="position:absolute;bottom:46px;font-size:13px;font-weight:700;color:'+(isV?"#fff":"#5B5446")+'">'+items[m]+'</span><span class="tag" style="position:absolute;right:14px;bottom:14px;background:rgba(30,36,48,.75);color:#fff">'+(m+1)+' / 6</span>'+
+ '<button type="button" class="icon" style="position:absolute;left:14px;top:14px;border:0;box-shadow:0 2px 10px rgba(30,36,48,.18)" aria-label="Retour"'+A("back")+'>'+ic("back",18,"#1E2430",2.4)+'</button>'+
+ '<span class="row" style="position:absolute;right:14px;top:14px"><button type="button" class="icon" style="border:0;box-shadow:0 2px 10px rgba(30,36,48,.18)" aria-label="Partager l’annonce"'+A("share")+'>'+ic("share",18,"#1E2430")+'</button><button type="button" class="icon" style="border:0;box-shadow:0 2px 10px rgba(30,36,48,.18)" aria-pressed="'+fav+'" aria-label="'+(fav?"Retirer des favoris":"Ajouter aux favoris")+'"'+A("fav",h.id)+'>'+ic("heart",18,fav?"#B4541F":"#1E2430",2,fav?"#B4541F":"none")+'</button></span></div>'+
+ '<div class="row" style="padding:12px 16px 0;gap:8px;overflow-x:auto">'+items.map(function(t,i){var v=i>=4;return'<button type="button" aria-label="'+t+'" aria-pressed="'+(i===m)+'"'+A("media",i)+' style="flex:0 0 auto;width:52px;height:52px;border-radius:10px;border:2px solid '+(i===m?"#1E2430":"transparent")+';background:'+(v?"#3B4252":tint(h.id+i))+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#5B5446">'+(v?ic("play",18,"#fff",1,"#fff"):"P"+(i+1))+'</button>'}).join("")+'</div><p class="small mute" style="margin:6px 16px 0">4 photos · 2 vidéos</p>'+
+ '<div class="pad col g20" style="padding-bottom:100px"><div class="col g8">'+(h.sp?'<span class="tag acc" style="align-self:flex-start">Annonce sponsorisée</span>':'')+(h.mine?'<span class="tag blue" style="align-self:flex-start">Mon annonce</span>':'')+'<h1>'+esc(h.nom)+'</h1><span class="mute">'+esc(h.ville||"Lieu non précisé")+(d!=null?" · à "+Math.round(d)+" km":"")+'</span>'+
+ (info.length?'<div class="grid3" style="margin-top:6px">'+info.map(function(x){return'<div class="col" style="background:var(--soft);border-radius:12px;padding:10px"><span class="xs mute" style="font-weight:600">'+x[0]+'</span><b style="font-size:13px">'+esc(x[1])+'</b></div>'}).join("")+'</div>':'')+'</div>'+
+ (h.desc?'<div class="col g8" style="border-top:1px solid var(--line);padding-top:18px"><h2>Description</h2><p style="margin:0;color:#3A404C">'+esc(h.desc)+'</p></div>':'')+
+ '<div class="col g12" style="border-top:1px solid var(--line);padding-top:18px"><div class="col"><span class="row g8"><h2>Santé et documents</h2><span class="tag acc">Premium</span></span><span class="small mute">Facultatifs · ajoutés par le vendeur</span></div>'+
+ (!docs.length?'<p class="note">Le vendeur n’a pas ajouté de documents.</p>':S.premium?'<span class="tag good" style="align-self:flex-start">Premium actif</span>'+docs.map(function(x){var asked=(S.asked||[]).indexOf(h.id+x.t)>-1;return'<div class="card row g12" style="padding:10px 12px"><span class="icon soft" style="border-radius:10px">'+ic("doc",20,"#1E2430")+'</span><span class="f1 col"><b style="font-size:14px">'+esc(x.t)+'</b><span class="small mute">'+esc(x.s||"")+'</span></span>'+(x.pub?'<button type="button" class="btn sm line"'+A("viewdoc",x.t)+'>Voir</button>':'<button type="button" class="btn sm'+(asked?' off':'')+'"'+A("askdoc",x.t)+'>'+(asked?"Demandé":"Demander")+'</button>')+'</div>'}).join(""):
+ '<div class="col g12" style="background:var(--soft);border-radius:16px;padding:16px"><span class="row g12"><span class="icon soft" style="background:#fff;border-radius:12px">'+ic("lock",22,"#1E2430")+'</span><b>'+docs.length+' documents disponibles pour ce cheval</b></span><div class="row wrap" style="gap:6px">'+docs.map(function(x){return'<span class="tag white" style="border:1px solid var(--line)">'+esc(x.t)+'</span>'}).join("")+'</div><span class="small" style="color:#3A404C">Radios, visite vétérinaire, ostéopathe et comptes rendus sont réservés aux membres Premium.</span><button type="button" class="btn block"'+A("trial")+'>Essayer Premium 30 jours</button><button type="button" class="link" style="align-self:center;font-size:13px"'+A("go","premium")+'>Voir les offres Premium</button></div>')+'</div>'+
+ '<div class="col g12" style="border-top:1px solid var(--line);padding-top:18px"><h2>Le vendeur</h2>'+
+ '<span class="row wrap" style="gap:6px"><span class="tag good">'+ic("shield",13,"#1F5A3A",2.8)+' Identité vérifiée par EquiRoyme</span></span>'+
+ (h.anon?'<div class="row g12"><span class="icon soft" style="width:52px;height:52px">'+ic("user",26,"#5E6470")+'</span><span class="col"><b>Vendeur anonyme</b><span class="small mute">'+(/^Pro/.test(h.cat)?"Professionnel":"Particulier")+'</span></span></div><div class="row g8" style="align-items:flex-start;background:var(--soft);border-radius:12px;padding:12px">'+ic("lock",18,"#1E2430")+'<span class="small" style="color:#3A404C">Ce vendeur a choisi de rester anonyme. Contactez-le par la messagerie : ses coordonnées restent masquées.</span></div>':
+ '<div class="row g12"><span class="ph" style="width:52px;height:52px;border-radius:50%;background:#DCE6D6;font-size:10px">Photo</span><span class="col"><b>'+esc(ECU[h.id]||"Vendeur")+'</b><span class="small mute">'+(/^Pro/.test(h.cat)?"Professionnel":"Particulier")+'</span></span></div>')+'</div>'+
+ (COORD[h.id]?'<div class="col g12" style="border-top:1px solid var(--line);padding-top:18px"><h2>Où se trouve le cheval</h2><div class="mapbox" style="border-radius:16px">'+franceSvg((function(){var q=xy(COORD[h.id]);return'<circle cx="'+q[0]+'" cy="'+q[1]+'" r="40" fill="#B4541F" fill-opacity=".15" stroke="#B4541F" stroke-width="2"/><circle cx="'+q[0]+'" cy="'+q[1]+'" r="8" fill="#B4541F" stroke="#fff" stroke-width="3"/>'})(),"Zone approximative du cheval",220)+'</div><span class="small mute">Zone approximative · l’adresse exacte est donnée par le vendeur</span>'+
+ '<button type="button" class="btn line"'+A("routeto",h.id)+'>'+ic("route",18,"#1E2430",2.2)+'Prévoir mon trajet jusqu’ici</button>'+
+ '<button type="button" class="btn dark"'+A("tour",h.id)+'>'+ic("cal",18,"#fff")+(inT?"Retirer de ma tournée d’essais":"Ajouter à ma tournée d’essais")+'</button>'+
+ '<button type="button" class="btn ghost"'+A("transportfor",h.id)+'>'+ic("truck",18,"#1E2430")+'Trouver un transporteur</button></div>':'')+
+ '<button type="button" class="link mute" style="align-self:flex-start;font-size:13px;font-weight:600"'+A("report")+'>Signaler cette annonce</button></div>'+
+ '<div class="bottombar"><span class="col"><b style="font-size:18px">'+price(h)+'</b><span class="small mute">'+(h.pmode==="ferme"?"Prix ferme":h.pmode==="demande"?"":"À débattre")+'</span></span>'+(h.mine?'<button type="button" class="btn dark"'+A("go","profil")+'>Gérer mon annonce</button>':'<button type="button" class="btn"'+A("contact",h.id)+'>Contacter le vendeur</button>')+'</div>'}
+
+function vDepot(){var d=S.dep,anon=d.anon==null?S.anonDef:d.anon;
+ function inp(k,lbl,type,ph){return'<label class="fld"><span>'+lbl+'</span><input'+(type?' type="'+type+'" min="0"':'')+' placeholder="'+(ph||"—")+'" value="'+esc(d[k])+'" data-bind="dep.'+k+'"></label>'}
+ return'<div class="top"><span style="width:44px"></span><h2 class="f1" style="text-align:center;font-size:17px">Déposer une annonce</h2>'+closeBtn("back")+'</div><div class="pad col g20" style="padding-bottom:110px">'+
+ '<div class="row g8" style="align-items:flex-start;background:var(--soft);border-radius:12px;padding:12px">'+ic("doc",18,"#1E2430")+'<span class="small" style="color:#3A404C">Tous les champs sont facultatifs. Ce que vous laissez vide n’apparaîtra pas sur l’annonce.</span></div>'+
+ '<section class="col g8"><h2>Photos et vidéos</h2><span class="small mute">Jusqu’à 4 photos et 2 vidéos</span><div class="grid3">'+[0,1,2,3].map(function(i){var on=i<d.photos;return'<button type="button" style="height:90px;border-radius:12px;border:1.5px '+(on?"solid #1E2430":"dashed #9AA0AA")+';background:'+(on?tint(i):"#FAFAFB")+';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:700"'+A("addphoto",i)+'>'+ic("cam",22,"#3A404C")+(on?"Photo "+(i+1)+" ✓":"Photo "+(i+1))+'</button>'}).join("")+[0,1].map(function(i){var on=i<d.videos;return'<button type="button" style="height:90px;border-radius:12px;border:1.5px '+(on?"solid #1E2430":"dashed #9AA0AA")+';background:'+(on?"#DDE5EC":"#FAFAFB")+';display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;font-weight:700"'+A("addvideo",i)+'>'+ic("video",22,"#3A404C")+(on?"Vidéo "+(i+1)+" ✓":"Vidéo "+(i+1))+'</button>'}).join("")+'</div></section>'+
+ '<section class="col g12"><h2>Le cheval</h2>'+seg([["0","Je vends"],["1","Je loue"]],String(d.loc),"dep.loc")+inp("nom","Nom du cheval","","Ex. Tornade du Pré")+
+ '<label class="fld"><span>Race</span><select data-bind="dep.race"><option value="">Choisir…</option>'+RACES.map(function(r){return'<option'+(d.race===r?" selected":"")+'>'+r+'</option>'}).join("")+'</select></label>'+
+ '<div class="grid2">'+inp("age","Âge (ans)","number")+inp("taille","Taille (cm)","number")+'</div>'+
+ '<div class="col g8"><b style="font-size:13px">Sexe</b>'+seg([["Hongre","Hongre"],["Jument","Jument"],["Étalon","Étalon"]],d.sexe,"dep.sexe")+'</div>'+
+ '<div class="col g8"><b style="font-size:13px">Discipline</b><div class="row wrap">'+DISC.map(function(x){return'<button type="button" class="chip" aria-pressed="'+(d.disc.indexOf(x)>-1)+'"'+A("dep.disc",x)+'>'+x+'</button>'}).join("")+'</div></div>'+
+ '<div class="col g8"><b style="font-size:13px">Catégorie</b><div class="row wrap">'+["Pro → Pro","Pro → Amateur","Amateur → Amateur"].map(function(x){return'<button type="button" class="chip" aria-pressed="'+(d.cat===x)+'"'+A("dep.cat",x)+'>'+x+'</button>'}).join("")+'</div></div>'+
+ '<div class="col g8"><b style="font-size:13px">Niveau d’épreuve</b>'+seg([["Club","Club"],["Amateur","Amateur"],["Pro","Pro"]],d.niveau,"dep.niveau")+'</div>'+
+ '<label class="fld"><span>Description</span><textarea rows="4" placeholder="Caractère, travail actuel, résultats, raison de la vente…" data-bind="dep.desc">'+esc(d.desc)+'</textarea></label></section>'+
+ '<section class="col g8"><h2>Santé et documents</h2><span class="small mute">Consultables par les acheteurs Premium</span>'+["Radios","Visite vétérinaire d’achat","Compte rendu ostéopathe","Carnet de vaccination","Papiers SIRE","Autres comptes rendus"].map(function(t){var mo=d.docs[t];return'<div class="card col g8" style="padding:12px"><div class="row g12"><span class="f1 col"><b style="font-size:14px">'+t+'</b><span class="small mute">'+(mo?(mo==="pub"?"Ajouté · visible (Premium)":"Ajouté · envoyé sur demande"):"Non ajouté")+'</span></span><button type="button" class="btn sm '+(mo?"ghost":"dark")+'"'+A("dep.doc",t)+'>'+(mo?"Retirer":"Ajouter")+'</button></div>'+(mo?seg([["pub","Visible (Premium)"],["req","Sur demande"]],mo,"dep.docmode",2).replace(/data-v="(pub|req)"/g,'data-v="$1|'+esc(t)+'"'):'')+'</div>'}).join("")+'</section>'+
+ '<section class="col g12"><h2>Prix et lieu</h2>'+seg([["ferme","Ferme"],["debattre","À débattre"],["demande","Sur demande"]],d.pmode,"dep.pmode")+(d.pmode!=="demande"?'<label class="fld"><span>Prix (€'+(d.loc==1?" / mois":"")+')</span><input type="number" min="0" placeholder="—" value="'+esc(d.prix)+'" data-bind="dep.prix"></label>':'')+
+ '<label class="fld"><span>Ville</span><select data-bind="dep.ville"><option value="">Choisir…</option>'+Object.keys(CITIES).map(function(c){return'<option'+(d.ville===c?" selected":"")+'>'+c+'</option>'}).join("")+'</select></label><span class="small mute">Seule une zone approximative est montrée sur la carte.</span></section>'+
+ '<section class="col g12"><h2>Confidentialité</h2><div class="card row g12"><span class="f1 col"><b style="font-size:14px">Afficher mon nom et ma photo</b><span class="small mute">'+(anon?"Vous restez anonyme : les acheteurs vous contactent par la messagerie.":"Les acheteurs voient votre nom et votre photo.")+'</span></span>'+sw(!anon,"dep.anon","Afficher mon nom et ma photo")+'</div></section>'+
+ '<section class="row g12" style="background:var(--accSoft);border-radius:16px;padding:14px"><span class="f1 col"><b style="font-size:14px">Mettre « À la une » · Premium</b><span class="small" style="color:#5C3A22">Votre cheval apparaît en haut de l’accueil, avec la mention « Sponsorisé ».</span></span>'+sw(d.une,"dep.une","Mettre à la une")+'</section></div>'+
+ '<div class="bottombar"><button type="button" class="btn ghost" style="flex:1"'+A("depreset")+'>Effacer</button><button type="button" class="btn" style="flex:1.5"'+A("publish")+'>Publier l’annonce</button></div>'}
+
+/* Tournée (reprise du prototype) */
+function plan(){var c=CITIES[S.TC],p=S.TT.split(":"),t=+p[0]*60+ +p[1],pos=c,rest=S.tour.filter(function(s){return s.st!=="refusé"&&COORD[s.id]}),out=[];
+ if(S.TO==="far")rest.sort(function(a,b){return hv(c,COORD[b.id])-hv(c,COORD[a.id])});
+ while(rest.length){if(S.TO==="near")rest.sort(function(a,b){return hv(pos,COORD[a.id])-hv(pos,COORD[b.id])});var s=rest.shift(),d=drive(pos,COORD[s.id]),arr=t+d,st=Math.max(arr,s.min||0),en=st+150;out.push({s:s,d:d,k:road(pos,COORD[s.id]),st:st,en:en});t=en;pos=COORD[s.id]}
+ return{out:out,ret:drive(pos,c),rk:road(pos,c),end:t+drive(pos,c)}}
+function vTournee(){var P=plan(),tk=P.rk;P.out.forEach(function(o){tk+=o.k});
+ var g="",a=[xy(CITIES[S.TC])].concat(P.out.map(function(o){return xy(COORD[o.s.id])}));
+ if(P.out.length){g+='<polyline points="'+a.concat([a[0]]).map(function(p){return p.join(",")}).join(" ")+'" fill="none" stroke="#B4541F" stroke-width="4" stroke-dasharray="8 6" stroke-linejoin="round"/>'}
+ PENS.forEach(function(p){var q=xy(p.c);g+='<rect x="'+(q[0]-7)+'" y="'+(q[1]-7)+'" width="14" height="14" rx="3" fill="#2F6B4F" stroke="#fff" stroke-width="2"/>'});
+ g+='<rect x="'+(a[0][0]-9)+'" y="'+(a[0][1]-9)+'" width="18" height="18" transform="rotate(45 '+a[0][0]+' '+a[0][1]+')" fill="#1E2430" stroke="#fff" stroke-width="2"/>';
+ P.out.forEach(function(o,i){var p=a[i+1];g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="14" fill="#B4541F" stroke="#fff" stroke-width="2"/><text x="'+p[0]+'" y="'+(p[1]+5)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">'+(i+1)+'</text>'});
+ var badge={brouillon:["Brouillon · pas encore envoyé",""],"envoyé":["En attente du vendeur","warn"],contre:["Le vendeur propose un autre horaire","blue"],"accepté":["Confirmé · ajouté à votre planning","good"],"refusé":["Refusé par le vendeur","bad"]};
+ function card(o,i){var x=byId(o.s.id),s=o.s.st,b=badge[s],sl=[o.st,o.st+60,o.st+120].map(hm).join(", "),btns="";
+  if(s==="brouillon")btns='<button type="button" class="btn sm ghost"'+A("t.rm",x.id)+'>Retirer</button>';
+  else if(s==="envoyé")btns='<button type="button" class="btn sm"'+A("t.ok",x.id)+'>Le vendeur accepte</button><button type="button" class="btn sm ghost"'+A("t.no",x.id)+'>Il refuse</button><button type="button" class="btn sm ghost"'+A("t.ct",x.id)+'>Autre horaire</button>';
+  else if(s==="contre")btns='<button type="button" class="btn sm"'+A("t.ok",x.id)+'>J’accepte</button><button type="button" class="btn sm ghost"'+A("t.rm",x.id)+'>Annuler</button>';
+  else btns='<button type="button" class="btn sm ghost"'+A("t.rm",x.id)+'>Annuler l’essai</button>';
+  return'<div class="card col g8" style="padding:12px"><div class="row g8"><span style="flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#B4541F;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center">'+(i+1)+'</span><button type="button" class="f1 col" style="border:0;background:none;padding:0;text-align:left"'+A("horse",x.id)+'><b style="font-size:14px">'+esc(x.nom)+' · '+esc(x.ville)+'</b><span class="small mute">Trajet '+dur(o.d)+' · '+o.k+' km · ≈ '+eur(o.k*S.KM)+'</span></button>'+(S.TO==="manual"?'<button type="button" class="btn sm ghost" aria-label="Monter"'+A("t.up",x.id)+'>↑</button><button type="button" class="btn sm ghost" aria-label="Descendre"'+A("t.dn",x.id)+'>↓</button>':'')+'</div><span class="tag '+b[1]+'" style="align-self:flex-start">'+b[0]+'</span><span class="small" style="color:#3A404C">'+(s==="accepté"?"Essai de "+hm(o.st)+" à "+hm(o.en):s==="contre"?"Nouvel horaire : essai à "+hm(o.st):"Créneaux proposés : "+sl)+'</span><div class="row wrap" style="gap:6px">'+btns+'</div></div>'}
+ var refused=S.tour.filter(function(s){return s.st==="refusé"});
+ return'<div class="mapbox" style="border-radius:0">'+franceSvg(g,"Carte de la tournée",260)+'<span class="tag white" style="position:absolute;left:14px;top:14px;font-size:15px;padding:8px 14px;box-shadow:0 3px 12px rgba(30,36,48,.16)">Ma tournée d’essais</span><span class="tag white" style="position:absolute;left:14px;bottom:12px;font-size:11px">◆ Départ · ● Essais · <span style="color:#2F6B4F">■ Écuries étapes</span></span></div>'+
+ '<div class="pad col g20"><section class="col g8"><label class="fld"><span>Départ</span><select data-bind="TC" data-rr="1">'+Object.keys(CITIES).map(function(k){return'<option'+(k===S.TC?" selected":"")+'>'+k+'</option>'}).join("")+'</select></label><div class="grid2"><label class="fld"><span>Jour</span><input type="date" value="'+S.TD+'" data-bind="TD"></label><label class="fld"><span>Départ à</span><input type="time" value="'+S.TT+'" data-bind="TT" data-rr="1"></label></div>'+
+ '<div class="col g8"><b style="font-size:13px">Ordre des visites</b>'+seg([["near","Plus proche"],["far","Plus loin"],["manual","Mon ordre"]],S.TO,"TO")+'</div><label class="fld"><span>Coût estimé au km (€)</span><input type="number" min="0" step="0.05" value="'+S.KM+'" data-bind="KM" data-rr="1"></label></section>'+
+ '<section class="col g12"><div class="row between"><h2>Mes essais</h2><span class="small mute">Un essai dure environ 2h30</span></div>'+
+ (S.tour.length?P.out.map(card).join("")+refused.map(function(s){return'<div class="card row g12" style="padding:12px"><span class="f1 col"><b style="font-size:14px">'+esc(byId(s.id).nom)+'</b><span class="tag bad" style="align-self:flex-start">Refusé par le vendeur</span></span><button type="button" class="btn sm ghost"'+A("t.rm",s.id)+'>Retirer</button></div>'}).join(""):'<div class="empty">Aucun essai prévu. Ouvrez la fiche d’un cheval et touchez « Ajouter à ma tournée d’essais ».<br><button type="button" class="btn sm dark" style="margin-top:12px"'+A("go","resultats")+'>Voir les chevaux</button></div>')+'</section>'+
+ (P.out.length?'<section class="col g8" style="background:var(--soft);border-radius:16px;padding:14px"><b>Bilan de la journée</b><span class="small" style="color:#3A404C">Retour à '+esc(S.TC)+' vers '+hm(P.end)+' · trajet retour '+dur(P.ret)+'</span><span class="small" style="color:#3A404C">Coût estimé : <b>'+eur(tk*S.KM)+'</b> pour environ '+tk+' km, hors péages</span>'+(P.end>1260?'<span class="small" style="color:#8A2424;font-weight:700">Journée très longue : répartissez les essais sur 2 jours ou dormez sur place.</span>':'')+'<button type="button" class="link" style="align-self:flex-start;color:#2F6B4F;font-size:13px"'+A("go","etapes")+'>'+ic("home",16,"#2F6B4F")+' Dormir dans une écurie étape</button></section>':'')+
+ (S.tour.some(function(s){return s.st==="brouillon"})?'<button type="button" class="btn block"'+A("t.send")+'>Envoyer les demandes aux vendeurs</button>':'')+
+ '<p class="note">Durées estimées : vitesse moyenne 90 km/h, distance à vol d’oiseau majorée de 25 %. Les boutons de réponse du vendeur servent à la démonstration.</p></div>'}
+
+function vEtapes(){var l=PENS.filter(pensOk),o=origin();if(o)l.sort(function(a,b){return hv(o,a.c)-hv(o,b.c)});
+ return'<div class="top"><button type="button" class="icon" aria-label="Retour"'+A("back")+'>'+ic("back",18,"#1E2430",2.4)+'</button><span class="f1 col"><h2>Écuries étapes</h2><span class="small mute">Une nuit pour vos chevaux pendant le trajet</span></span></div>'+
+ '<div class="pad col g16"><div class="scrollx">'+Object.keys(PL).map(function(k){return'<button type="button" class="chip" aria-pressed="'+(S.pf.indexOf(k)>-1)+'"'+A("pf",k)+'>'+PL[k]+'</button>'}).join("")+'</div><b>'+l.length+' écurie'+(l.length>1?"s":"")+' étape'+(l.length>1?"s":"")+(o?" · triées par distance":"")+'</b>'+
+ (l.length?l.map(function(p){return'<button type="button" class="col g4" style="border:0;background:none;padding:0;text-align:left"'+A("etape",p.id)+'><span class="ph" style="height:140px;width:100%;border-radius:16px;background:'+tint(p.id)+'">Photo de l’écurie<span class="tag white" style="position:absolute;left:10px;top:10px;color:var(--good)">Partenaire</span></span><span class="row between" style="margin-top:4px"><b>'+esc(p.nom)+' · '+esc(p.ville)+'</b>'+(o?'<span class="small mute">'+Math.round(hv(o,p.c))+' km</span>':'')+'</span><span class="row wrap" style="gap:6px">'+Object.keys(p.pr).map(function(k){return'<span class="tag">'+PL[k]+'</span>'}).join("")+'</span><b>dès '+eur(minp(p))+' / nuit</b></button>'}).join(""):'<div class="empty">Aucune écurie ne propose toutes ces prestations. Retirez-en une.</div>')+
+ '<div class="row g12" style="background:var(--soft);border-radius:16px;padding:14px">'+ic("home",22,"#1E2430")+'<span class="f1 col"><b style="font-size:14px">Vous avez une écurie ?</b><span class="small mute">Devenez écurie étape et recevez des réservations. Gratuit au lancement.</span></span></div></div>'}
+
+function vMessages(){if(S.conv!=null)return vChat();var tabs=[["tous","Tous"],["achat","Achats"],["vente","Mes ventes"],["services","Services"]];var l=S.convs.filter(function(c){return S.msgTab==="tous"||c.kind===S.msgTab}).slice().reverse();
+ return'<div class="pad col g12"><h1>Messages</h1><div class="scrollx">'+tabs.map(function(t){return'<button type="button" class="chip" aria-pressed="'+(S.msgTab===t[0])+'"'+A("msgtab",t[0])+'>'+t[1]+'</button>'}).join("")+'</div></div>'+
+ (l.length?l.map(function(c){var last=c.msgs[c.msgs.length-1],h=c.horse?byId(c.horse):null;return'<button type="button" class="row g12" style="width:100%;padding:14px 18px;border:0;border-bottom:1px solid var(--soft2);background:#fff;text-align:left"'+A("openconv",c.id)+'><span class="ph" style="width:52px;height:52px;flex-shrink:0;background:'+tint(c.horse||c.id)+';font-size:10px">'+(c.kind==="services"?ic(c.icon||"home",22,"#5B5446"):"Photo")+'</span><span class="f1 col g4"><span class="row between"><b>'+esc(c.title)+'</b>'+(c.unread?'<span class="tag acc">Nouveau</span>':'')+'</span><span class="small mute">'+(h?esc(h.nom)+" · "+(c.kind==="vente"?"Mon annonce":"Achat"):esc(c.about||""))+'</span><span class="small" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'+(c.unread?"font-weight:700":"color:var(--mute)")+'">'+esc(last.t)+'</span></span></button>'}).join(""):'<div class="pad"><div class="empty">Aucune conversation. Contactez un vendeur depuis une annonce.</div></div>')}
+function vChat(){var c=S.convs.filter(function(x){return x.id===S.conv})[0];if(!c){S.conv=null;return vMessages()}var h=c.horse?byId(c.horse):null,rev=S.reviewed.indexOf(c.id)>-1;
+ return'<div class="top"><button type="button" class="icon" style="border:0" aria-label="Retour aux messages"'+A("closeconv")+'>'+ic("back",20,"#1E2430",2.4)+'</button><span class="f1 col"><b>'+esc(c.title)+'</b><span class="small" style="color:var(--good);font-weight:700">'+ic("shield",13,"#1F5A3A",2.8)+' Identité vérifiée</span></span></div>'+
+ '<div class="col g12" style="padding:14px 16px 150px;background:#F7F7F8;min-height:70vh">'+
+ (h?'<button type="button" class="card row g12" style="padding:10px;text-align:left"'+A("horse",h.id)+'><span class="ph" style="width:48px;height:48px;flex-shrink:0;background:'+tint(h.id)+';font-size:10px">Photo</span><span class="f1 col"><b style="font-size:14px">'+esc(h.nom)+'</b><span class="small mute">'+esc(h.race||"")+' · '+price(h)+'</span></span>'+ic("chev",16,"#1E2430",2.4)+'</button>':'')+
+ c.msgs.map(function(m){return'<div class="bubble '+m.who+'">'+esc(m.t)+'</div>'}).join("")+
+ (c.kind==="achat"&&h?'<div class="card col g8"><b style="font-size:14px">Conclure la vente</b><a class="btn ghost" style="justify-content:flex-start" href="'+URL_DOC.vente+'" target="_blank" rel="noopener">'+ic("doc",18,"#1E2430")+'Contrat de vente EquiRoyme</a><button type="button" class="btn ghost" style="justify-content:flex-start"'+A("transportfor",h.id)+'>'+ic("truck",18,"#1E2430")+'Faire transporter le cheval</button><button type="button" class="btn ghost" style="justify-content:flex-start"'+A("review",c.id)+'>'+ic("star",18,"#1E2430")+(rev?"Merci pour votre avis":"Laisser un avis après la vente")+'</button></div>':'')+'</div>'+
+ '<div class="bottombar" style="gap:8px;padding:10px 12px"><label class="f1" style="display:flex;background:var(--soft);border-radius:999px;padding:0 16px"><span class="sr">Votre message</span><input id="draft" placeholder="Écrire un message…" value="'+esc(S.draft)+'" data-bind="draft" style="flex:1;min-height:44px;border:0;outline:0;background:transparent;font-size:14px"></label><button type="button" class="icon" style="border:0;background:var(--acc)" aria-label="Envoyer"'+A("send")+'>'+ic("send",18,"#fff",2.4)+'</button></div>'}
+
+function vFavoris(){var hs=S.favs.map(byId).filter(Boolean);
+ return'<div class="pad col g16"><h1>Favoris</h1>'+seg([["chevaux","Chevaux"],["alertes","Alertes"]],S.favTab,"favtab")+
+ (S.favTab==="chevaux"?'<span class="small mute">'+hs.length+' cheva'+(hs.length>1?"ux enregistrés":"l enregistré")+'</span>'+(hs.length?'<div class="grid2" style="gap:14px">'+hs.map(hCard).join("")+'</div>':'<div class="empty">Touchez le cœur d’une annonce pour la retrouver ici.</div>'):
+ '<span class="row g8"><span class="tag acc">Premium</span><span class="small mute">E-mail et notification dès qu’une nouvelle annonce correspond.</span></span>'+
+ (!S.premium?'<div class="col g12" style="background:var(--soft);border-radius:16px;padding:16px"><b>Les alertes sont réservées aux membres Premium</b><button type="button" class="btn"'+A("go","premium")+'>Découvrir Premium</button></div>':
+ '<div class="card col" style="padding:6px 14px"><b style="font-size:13px;padding-top:8px">Comment me prévenir ?</b><div class="row g12" style="min-height:56px"><span class="f1 col"><b style="font-size:14px">Notification sur le téléphone</b><span class="small mute">Instantanée, dès la publication</span></span>'+sw(S.ch.push,"ch.push","Notification sur le téléphone")+'</div><div class="row g12" style="min-height:56px"><span class="f1 col"><b style="font-size:14px">E-mail</b><span class="small mute">Un e-mail par nouvelle annonce</span></span>'+sw(S.ch.mail,"ch.mail","E-mail")+'</div></div>'+
+ (S.alerts.length?S.alerts.map(function(a){return'<div class="card row g12"><span class="f1 col"><b style="font-size:14px">'+esc(a.label)+'</b><span class="small mute">'+(a.on?"Active":"En pause")+'</span></span>'+sw(a.on,"alert.on",a.label).replace('data-act="alert.on"','data-act="alert.on" data-v="'+a.id+'"')+'<button type="button" class="icon soft" aria-label="Supprimer l’alerte"'+A("alert.rm",a.id)+'>'+ic("close",14,"#1E2430",2.6)+'</button></div>'}).join(""):'<div class="empty">Aucune alerte. Faites une recherche puis touchez « Créer une alerte ».</div>')+
+ '<button type="button" class="btn line"'+A("open","filtres")+'>'+ic("plus",18,"#1E2430",2.4)+'Nouvelle recherche</button>'))+'</div>'}
+
+function vProfil(){var mine=H.filter(function(h){return h.mine});
+ function row(lbl,act,v,right){return'<button type="button" class="listrow"'+A(act,v)+'>'+lbl+'<span class="small mute">'+(right||"")+' ›</span></button>'}
+ function lrow(lbl,url){return'<a class="listrow" href="'+url+'" target="_blank" rel="noopener">'+lbl+'<span class="small mute">›</span></a>'}
+ return'<div class="pad col g20"><h1>Profil</h1><div class="row g12"><span class="ph" style="width:64px;height:64px;border-radius:50%;background:#DCE6D6;font-size:11px">Photo</span><span class="f1 col g4"><b style="font-size:18px">'+(USER?esc(USER.prenom||USER.email):"Visiteur")+'</b>'+(USER?'<span class="small mute">'+esc(USER.email)+'</span>':'')+'<span class="small mute">'+({acheter:"Acheteur",vendre:"Vendeur",pro:"Professionnel"}[S.goal]||"")+(S.premium?" · Premium":"")+'</span><span class="tag '+(S.verified?"good":"")+'" style="align-self:flex-start">'+(S.verified?"✓ Identité vérifiée":"Identité non vérifiée")+'</span></span></div>'+
+ (!S.verified?'<div class="card col g8"><span class="row g8" style="align-items:flex-start">'+ic("shield",22,"#1E2430")+'<span class="col"><b style="font-size:14px">Faites vérifier votre identité</b><span class="small mute">Le badge rassure les acheteurs. Même anonyme, EquiRoyme sait qui vous êtes.</span></span></span><button type="button" class="btn dark"'+A("verify")+'>Vérifier mon identité</button></div>':'')+
+ '<button type="button" class="bigbtn" style="background:var(--accSoft);border-color:var(--accSoft)"'+A("go","premium")+'><span class="ic">'+ic("crown",22,"#fff")+'</span><span class="f1 col"><b>EquiRoyme Premium</b><span class="small" style="color:#5C3A22">'+(S.premium?"Essai actif · gérer mon abonnement":"Documents de santé, alertes, mise à la une")+'</span></span>'+ic("chev",18,"#1E2430",2.4)+'</button>'+
+ '<section class="col"><h3 class="small mute" style="text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Mes annonces ('+mine.length+')</h3>'+mine.map(function(h){return row(esc(h.nom),"horse",h.id,price(h))}).join("")+row("Déposer une annonce","go","depot")+'</section>'+
+ '<section class="col"><h3 class="small mute" style="text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Mon activité</h3>'+row("Mes essais et trajets","go","tournee",S.tour.length+" essai"+(S.tour.length>1?"s":""))+row("Favoris et alertes","go","favoris",S.favs.length+" favori"+(S.favs.length>1?"s":""))+row("Écuries étapes","go","etapes")+'</section>'+
+ '<section class="col g8"><h3 class="small mute" style="text-transform:uppercase;letter-spacing:.04em">Confidentialité</h3><div class="row g12" style="min-height:60px"><span class="f1 col"><b style="font-size:15px;font-weight:600">Rester anonyme par défaut</b><span class="small mute">Appliqué à mes nouvelles annonces.</span></span>'+sw(S.anonDef,"anondef","Rester anonyme par défaut")+'</div><div class="row g12" style="min-height:60px"><span class="f1 col"><b style="font-size:15px;font-weight:600">Masquer mon numéro</b><span class="small mute">Les acheteurs passent par la messagerie.</span></span>'+sw(S.phone,"phone","Masquer mon numéro")+'</div></section>'+
+ '<section class="col"><h3 class="small mute" style="text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Contrats EquiRoyme</h3>'+lrow("Contrat de vente de cheval",URL_DOC.vente)+lrow("Contrat de transport",URL_DOC.transport)+lrow("Contrat de pension",URL_DOC.pension)+'</section>'+
+ '<section class="col"><h3 class="small mute" style="text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Compte</h3>'+lrow("Conditions d’utilisation et mentions légales",URL_DOC.legal)+row("Revoir l’écran de bienvenue","welcome")+(USER?'<button type="button" class="listrow" style="color:#8A2424;font-weight:700"'+A("logout")+'>Se déconnecter</button>':'<button type="button" class="listrow" style="font-weight:700"'+A("auth","login")+'>Se connecter ou créer un compte</button>')+'<button type="button" class="listrow mute" style="font-weight:600"'+A("reset")+'>Réinitialiser les données de démonstration</button></section>'+
+ '<p class="note">Prototype EquiRoyme : vos actions sont gardées dans ce navigateur uniquement.</p></div>'}
+
+function vPremium(){var PLN={acheteur:["Pour trouver le bon cheval sans mauvaise surprise.",[["Documents de santé","Radios, visite vétérinaire, ostéopathe, vaccins et comptes rendus de chaque annonce."],["Alertes par e-mail et notification","Enregistrez vos recherches : prévenu dès qu’une nouvelle annonce correspond."],["Tournées d’essais illimitées","Plusieurs essais sur la même journée, avec itinéraire et coût."],["Contrat de vente prérempli","Le modèle EquiRoyme, rempli avec les infos de l’annonce."]]],
+ vendeur:["Pour vendre plus vite et rassurer les acheteurs.",[["Annonce « À la une »","En haut de l’accueil et des résultats, avec la mention « Sponsorisé »."],["Statistiques de l’annonce","Vues, favoris et demandes reçues."],["Remontée automatique","Votre annonce revient en tête des « Plus récentes »."],["Alertes par e-mail et notification","À chaque message, demande d’essai ou de document."]]],
+ pro:["Publier reste gratuit. Le Pro, c’est pour vendre plus vite et travailler moins.",[["Acheteurs sérieux","Identité vérifiée, statut Premium et budget indiqué."],["Agenda d’essais automatique","Les acheteurs réservent un créneau libre, avec rappels."],["Acompte pour bloquer un essai","Fini les rendez-vous manqués."],["Acheteurs qui cherchent vos chevaux","Prévenu quand une alerte correspond à l’un de vos chevaux."],["Page vitrine et avis","Vos chevaux, vos résultats et vos avis, à partager."],["Documents réutilisables et contrat automatique","Envoyés une fois, réutilisés pour chaque annonce."]]]}[S.plan];
+ return'<div style="position:relative;background:#1E2430;color:#fff;padding:60px 22px 24px" class="col g8"><button type="button" class="icon" style="position:absolute;right:14px;top:14px;border:0;background:rgba(255,255,255,.14)" aria-label="Fermer"'+A("back")+'>'+ic("close",16,"#fff",2.6)+'</button><span class="row g8" style="color:#F3C9AE;font-weight:700;font-size:13px">'+ic("crown",18,"#F3C9AE")+'EquiRoyme Premium</span><h1 style="font-size:27px;line-height:1.15">Achetez et vendez en toute confiance</h1><span style="color:#D5D8DD;font-size:14px">30 jours d’essai gratuit, sans engagement.</span></div>'+
+ '<div class="pad col g16" style="padding-bottom:130px">'+seg([["acheteur","Acheteur"],["vendeur","Vendeur"],["pro","Pro"]],S.plan,"plan")+'<span class="small mute">'+PLN[0]+'</span>'+PLN[1].map(function(k){return'<div class="row g12" style="align-items:flex-start"><span style="width:28px;height:28px;border-radius:50%;background:var(--goodSoft);display:flex;align-items:center;justify-content:center;flex-shrink:0">'+ic("check",14,"#1F5A3A",3)+'</span><span class="col"><b>'+k[0]+'</b><span class="small mute">'+k[1]+'</span></span></div>'}).join("")+
+ '<div class="grid2">'+[["mois","Mensuel","par mois"],["an","Annuel","par an"]].map(function(p){var on=S.period===p[0];return'<button type="button" aria-pressed="'+on+'"'+A("period",p[0])+' class="col" style="align-items:flex-start;gap:2px;padding:12px;border-radius:14px;text-align:left;border:2px solid '+(on?"#1E2430":"#E4E6EA")+';background:'+(on?"#F4F5F7":"#fff")+'"><b style="font-size:13px">'+p[1]+'</b><b style="font-size:18px">'+(S.plan==="acheteur"&&p[0]==="mois"?"4,90 €":"[prix]")+'</b><span class="xs mute" style="font-weight:600">'+p[2]+'</span></button>'}).join("")+'</div>'+
+ '<p class="note">Tarifs à confirmer. Le paiement n’est pas actif dans ce prototype.</p></div>'+
+ '<div class="bottombar col" style="flex-direction:column;align-items:stretch;gap:6px">'+(S.premium?'<button type="button" class="btn ok"'+A("stoptrial")+'>Premium actif · arrêter l’essai</button>':'<button type="button" class="btn"'+A("trial")+'>Essayer 30 jours gratuitement</button>')+'<span class="small mute" style="text-align:center">Résiliable à tout moment dans votre profil</span></div>'}
+
+function vTransport(){var t=S.tr,a=CITIES[t.from],b=CITIES[t.to],k=a&&b?road(a,b):null;
+ function sel(key,lbl,ph){return'<label class="fld soft"><span>'+lbl+'</span><select data-bind="tr.'+key+'" data-rr="1"><option value="">'+ph+'</option>'+Object.keys(CITIES).map(function(c){return'<option'+(t[key]===c?" selected":"")+'>'+c+'</option>'}).join("")+'</select></label>'}
+ return'<div class="top"><span style="width:44px"></span><h2 class="f1" style="text-align:center;font-size:17px">Transport du cheval</h2>'+closeBtn("back")+'</div><div class="pad col g20">'+
+ '<section class="col g8">'+sel("from","Prise en charge","Choisir une ville")+sel("to","Livraison","Choisir une ville")+'<div class="grid2"><label class="fld"><span>Date souhaitée</span><input type="date" data-bind="tr.date" value="'+esc(t.date||"")+'"></label><div class="fld" style="flex-direction:row;align-items:center;justify-content:space-between"><span class="col"><span>Chevaux</span><b style="font-size:15px">'+t.n+'</b></span><span class="row" style="gap:4px"><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Retirer un cheval"'+A("tr.n","-1")+'>−</button><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Ajouter un cheval"'+A("tr.n","1")+'>+</button></span></div></div>'+(k?'<span class="tag" style="align-self:flex-start">≈ '+k+' km par la route</span>':'')+'</section>'+
+ '<section class="col g12"><div class="col"><h2>Transporteurs partenaires</h2><span class="small mute">Exemples pour le prototype · devis gratuit</span></div>'+CARRIERS.map(function(c){var done=t.asked.indexOf(c.id)>-1;return'<div class="card col g8"><div class="row g12"><span class="icon soft" style="width:48px;height:48px;border-radius:12px">'+ic("truck",24,"#1E2430")+'</span><span class="f1 col"><b>'+esc(c.nom)+'</b><span class="small mute">'+c.veh+'</span><span class="small" style="color:var(--good);font-weight:700">'+ic("shield",13,"#1F5A3A",2.8)+' Professionnel vérifié</span></span></div><button type="button" class="btn'+(done?" off":"")+'"'+A("devis",c.id)+'>'+(done?"Devis demandé · réponse dans vos messages":"Demander un devis")+'</button></div>'}).join("")+
+ '<span class="note">À la réservation, le contrat de transport EquiRoyme est proposé aux deux parties. Le transporteur reste responsable du transport.</span><a class="link" style="font-size:13px;align-self:flex-start;display:flex;align-items:center" href="'+URL_DOC.transport+'" target="_blank" rel="noopener">Lire le contrat de transport</a></section>'+
+ '<section class="col g12"><div class="col"><h2>Trajets proposés par la communauté</h2><span class="small mute">Particuliers et pros qui ont des places libres</span></div>'+(function(){var l=S.offers.filter(function(o){return(!t.from||o.from===t.from)&&(!t.to||o.to===t.to)});return l.length?l.map(offerCard).join(""):'<div class="empty">Aucun trajet proposé pour ce parcours pour l’instant.</div>'})()+'<button type="button" class="btn line"'+A("open","proposer")+'>'+ic("plus",18,"#1E2430",2.4)+'Proposer un transport</button></section>'+'<button type="button" class="btn line"'+A("selfroute")+'>'+ic("route",18,"#1E2430",2.2)+'Je transporte moi-même · prévoir mon trajet</button></div>'}
+
+function vBienvenue(){var gs=[["acheter","Acheter ou louer un cheval","Recherche, alertes, essais et transport"],["vendre","Vendre ou louer mon cheval","Annonce depuis le téléphone, documents, mise à la une"],["pro","Je suis professionnel","Écurie, éleveur, marchand ou transporteur"]];
+ return'<div class="col" style="min-height:100vh"><div class="col g12" style="background:#1E2430;color:#fff;padding:64px 26px 32px"><span class="row g8"><span style="width:48px;height:48px;border-radius:14px;background:var(--acc);display:flex;align-items:center;justify-content:center"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M6 20V11a6 6 0 0 1 12 0v9"/><path d="M6 15h1.5M16.5 15H18"/></svg></span><b style="font-size:30px;letter-spacing:-.02em">EquiRoyme</b></span><h1 style="font-size:26px;line-height:1.2">Trouvez votre cheval.<br>Préparez la route.</h1><span style="color:#D5D8DD;font-size:14px">Annonces vérifiées, documents de santé, essais et transport : tout au même endroit.</span></div>'+
+ '<div class="pad col g12"><h2>Vous venez pour…</h2>'+gs.map(function(g){var on=S.goal===g[0];return'<button type="button" aria-pressed="'+on+'"'+A("goal",g[0])+' class="row between g12" style="min-height:64px;padding:10px 16px;border-radius:14px;text-align:left;border:2px solid '+(on?"#1E2430":"#E4E6EA")+';background:'+(on?"#F4F5F7":"#fff")+'"><span class="col"><b>'+g[1]+'</b><span class="small mute">'+g[2]+'</span></span><span style="flex-shrink:0;width:22px;height:22px;border-radius:50%;box-sizing:border-box;border:'+(on?"7px solid #B4541F":"2px solid #767C86")+'"></span></button>'}).join("")+
+ '<button type="button" class="btn" style="margin-top:8px"'+A("auth","signup")+'>Créer mon compte</button><button type="button" class="btn line"'+A("auth","login")+'>J’ai déjà un compte</button><button type="button" class="link" style="align-self:center"'+A("start")+'>Continuer sans compte</button><a class="link small mute" style="align-self:center;font-weight:600;display:flex;align-items:center" href="'+URL_DOC.legal+'" target="_blank" rel="noopener">En continuant, vous acceptez les conditions d’utilisation</a></div></div>'}
+
+/* ---------- Comptes (Supabase) ---------- */
+var SB_URL="https://gwwtewcylnlagmmhbhrg.supabase.co",SB_KEY="sb_publishable_509Ab5Ox-MNcrrh7VOAoyQ_ypzYdBhn",SITE="https://equiroyme.fr/";
+var sb=null,USER=null,AUTH={mode:"login",msg:"",err:"",busy:false};
+try{if(window.supabase)sb=window.supabase.createClient(SB_URL,SB_KEY)}catch(e){sb=null}
+function setUser(u){USER=u?{email:u.email,prenom:(u.user_metadata&&u.user_metadata.prenom)||""}:null}
+function frErr(m){m=String(m||"");if(/Invalid login/i.test(m))return"E-mail ou mot de passe incorrect.";if(/not confirmed/i.test(m))return"Confirmez d’abord votre adresse e-mail grâce au lien reçu.";if(/already registered|already been registered/i.test(m))return"Un compte existe déjà avec cet e-mail. Connectez-vous.";if(/at least|weak|short/i.test(m))return"Le mot de passe doit contenir au moins 6 caractères.";if(/valid email|invalid.*email/i.test(m))return"Adresse e-mail invalide.";if(/rate limit|too many/i.test(m))return"Trop de tentatives. Réessayez dans quelques minutes.";if(/fetch|network/i.test(m))return"Connexion impossible. Vérifiez votre réseau.";return"Une erreur est survenue : "+m}
+if(sb){sb.auth.getSession().then(function(r){setUser(r.data&&r.data.session&&r.data.session.user);render(true)});
+ sb.auth.onAuthStateChange(function(ev,session){setUser(session&&session.user);
+  if(ev==="PASSWORD_RECOVERY"){AUTH={mode:"newpass",msg:"",err:"",busy:false};S.view="auth"}
+  else if(ev==="SIGNED_IN"&&S.view==="auth"&&AUTH.mode!=="newpass"){S.seen=true;S.view="accueil";toast("Bienvenue"+(USER&&USER.prenom?" "+USER.prenom:"")+" !")}
+  else if(ev==="SIGNED_IN"&&/access_token|type=signup/.test(location.hash)){S.seen=true;toast("Adresse e-mail confirmée, vous êtes connecté.")}
+  render(true)})}
+function vAuth(){var m=AUTH.mode,T={login:["Se connecter","Content de vous revoir sur EquiRoyme."],signup:["Créer mon compte","Gratuit · quelques secondes"],reset:["Mot de passe oublié","Nous vous envoyons un lien pour en choisir un nouveau."],newpass:["Nouveau mot de passe","Choisissez votre nouveau mot de passe."]}[m];
+ function f(id,lbl,type,ac,ph){var val=id==="a_email"?AUTH.email:id==="a_prenom"?AUTH.prenom:"";return'<label class="fld"><span>'+lbl+'</span><input id="'+id+'" type="'+type+'" autocomplete="'+ac+'" placeholder="'+(ph||"")+'" value="'+esc(val||"")+'" required></label>'}
+ return'<div class="col" style="min-height:100vh"><div class="top" style="position:static"><button type="button" class="icon" aria-label="Retour"'+A("auth.back")+'>'+ic("back",18,"#1E2430",2.4)+'</button><b class="f1" style="text-align:center">EquiRoyme</b><span style="width:44px"></span></div>'+
+ '<form class="pad col g16" data-form="auth" novalidate style="padding-top:28px"><div class="col g4"><h1>'+T[0]+'</h1><span class="mute">'+T[1]+'</span></div>'+
+ (!sb?'<div class="card small" style="background:#F7E3E3;border-color:#F7E3E3;color:#8A2424">Le service de connexion n’a pas pu se charger. Vérifiez votre connexion internet puis rechargez la page.</div>':'')+
+ (m==="signup"?f("a_prenom","Prénom","text","given-name","Ex. Mélodie"):'')+
+ (m!=="newpass"?f("a_email","Adresse e-mail","email","email","vous@exemple.fr"):'')+
+ (m!=="reset"?f("a_pass",m==="login"?"Mot de passe":"Mot de passe (6 caractères minimum)","password",m==="login"?"current-password":"new-password"):'')+
+ (AUTH.err?'<div role="alert" class="small" style="color:#8A2424;font-weight:700">'+esc(AUTH.err)+'</div>':'')+
+ (AUTH.msg?'<div role="status" class="card small" style="background:var(--goodSoft);border-color:var(--goodSoft);color:var(--good);font-weight:700">'+esc(AUTH.msg)+'</div>':'')+
+ '<button type="submit" class="btn'+(AUTH.busy?" off":"")+'"'+(AUTH.busy?" disabled":"")+'>'+(AUTH.busy?"Un instant…":{login:"Se connecter",signup:"Créer mon compte",reset:"Envoyer le lien",newpass:"Enregistrer"}[m])+'</button>'+
+ (m==="login"?'<button type="button" class="link" style="align-self:center"'+A("auth","reset")+'>Mot de passe oublié ?</button><span class="mute small" style="text-align:center">Pas encore de compte ? <button type="button" class="link" style="font-size:13px;min-height:32px"'+A("auth","signup")+'>Créer un compte</button></span>':'')+
+ (m==="signup"?'<span class="mute small" style="text-align:center">Déjà inscrit ? <button type="button" class="link" style="font-size:13px;min-height:32px"'+A("auth","login")+'>Se connecter</button></span><a class="link small mute" style="align-self:center;font-weight:600;display:flex;align-items:center" href="'+URL_DOC.legal+'" target="_blank" rel="noopener">En créant un compte, vous acceptez les conditions d’utilisation</a>':'')+
+ (m==="reset"?'<button type="button" class="link" style="align-self:center"'+A("auth","login")+'>Retour à la connexion</button>':'')+'</form></div>'}
+function authSubmit(){if(!sb||AUTH.busy)return;var v=function(id){var e=document.getElementById(id);return e?e.value.trim():""};var email=v("a_email"),pass=(document.getElementById("a_pass")||{}).value||"",prenom=v("a_prenom"),m=AUTH.mode,p;
+ AUTH.err="";AUTH.msg="";AUTH.email=email;AUTH.prenom=prenom;
+ if(m!=="newpass"&&!/^\S+@\S+\.\S+$/.test(email)){AUTH.err="Adresse e-mail invalide.";render();return}
+ if(m!=="reset"&&pass.length<6&&m!=="login"){AUTH.err="Le mot de passe doit contenir au moins 6 caractères.";render();return}
+ if(m==="login"&&!pass){AUTH.err="Entrez votre mot de passe.";render();return}
+ AUTH.busy=true;render();
+ if(m==="login")p=sb.auth.signInWithPassword({email:email,password:pass});
+ else if(m==="signup")p=sb.auth.signUp({email:email,password:pass,options:{emailRedirectTo:SITE,data:{prenom:prenom,profil:S.goal}}});
+ else if(m==="reset")p=sb.auth.resetPasswordForEmail(email,{redirectTo:SITE});
+ else p=sb.auth.updateUser({password:pass});
+ p.then(function(r){AUTH.busy=false;if(r.error){AUTH.err=frErr(r.error.message);render();return}
+  if(m==="signup"){if(r.data&&r.data.session){S.seen=true;S.view="accueil";toast("Compte créé, bienvenue !")}else AUTH.msg="Compte créé ! Ouvrez l’e-mail que nous venons d’envoyer à "+email+" et cliquez sur le lien pour confirmer."}
+  else if(m==="reset")AUTH.msg="Si un compte existe avec "+email+", un e-mail vient d’être envoyé avec un lien pour changer de mot de passe.";
+  else if(m==="newpass"){S.seen=true;S.view="accueil";toast("Mot de passe modifié")}
+  else{S.seen=true;S.view="accueil"}
+  render()}).catch(function(e){AUTH.busy=false;AUTH.err=frErr(e&&e.message);render()})}
+document.addEventListener("submit",function(e){if(e.target.dataset&&e.target.dataset.form==="auth"){e.preventDefault();authSubmit()}});
+
+/* ---------- Fenêtres ---------- */
+function oFiltres(){var f=S.f;
+ function num(k,l,ph){return'<label class="fld"><span>'+l+'</span><input type="number" min="0" inputmode="numeric" placeholder="'+(ph||"—")+'" value="'+esc(f[k])+'" data-bind="f.'+k+'" data-rr="count"></label>'}
+ return'<div class="sheet" role="dialog" aria-modal="true" aria-label="Rechercher un cheval">'+sheetHead("Rechercher un cheval")+'<div class="bd">'+
+ '<div class="col g8"><h3>Je cherche</h3>'+seg([["vente","Achat"],["location","Location"],["tous","Les deux"]],f.type,"f.type")+'</div>'+
+ '<div class="col g8"><h3>Catégorie</h3><div class="row wrap">'+["Pro → Pro","Pro → Amateur","Amateur → Amateur"].map(function(x){return'<button type="button" class="chip" aria-pressed="'+(f.cat===x)+'"'+A("f.cat",x)+'>'+x+'</button>'}).join("")+'</div></div>'+
+ '<div class="col g8"><h3>Discipline</h3><div class="row wrap">'+DISC.map(function(x){return'<button type="button" class="chip" aria-pressed="'+(f.disc.indexOf(x)>-1)+'"'+A("f.disc",x)+'>'+x+'</button>'}).join("")+'</div></div>'+
+ '<label class="fld"><span>Race</span><select data-bind="f.race" data-rr="count"><option value="">Toutes les races</option>'+RACES.map(function(r){return'<option'+(f.race===r?" selected":"")+'>'+r+'</option>'}).join("")+'</select></label>'+
+ '<div class="col g8"><h3>Sexe</h3>'+seg([["","Tous"],["Hongre","Hongre"],["Jument","Jument"],["Étalon","Étalon"]],f.sexe,"f.sexe")+'</div>'+
+ '<div class="col g8"><h3>Débourrage</h3>'+seg([["","Peu importe"],["1","Débourré"],["0","Non débourré"]],f.deb,"f.deb")+'</div>'+
+ '<div class="col g8"><h3>Niveau d’épreuve (jusqu’à)</h3>'+seg([["","Toutes"],["Club","Club"],["Amateur","Amateur"],["Pro","Pro"]],f.epr,"f.epr")+'</div>'+
+ '<div class="col g8"><h3>Âge</h3><div class="grid2">'+num("ageMin","Minimum (ans)","0")+num("ageMax","Maximum (ans)","25+")+'</div></div>'+
+ '<label class="fld"><span>Taille</span><select data-bind="f.taille" data-rr="count">'+TAILLES.map(function(t){return'<option value="'+t[0]+'"'+(f.taille===t[0]?" selected":"")+'>'+t[1]+'</option>'}).join("")+'</select></label>'+
+ '<div class="col g8"><h3>Prix</h3><div class="grid2">'+num("prixMin","Minimum (€)")+num("prixMax",f.type==="location"?"Maximum (€ / mois)":"Maximum (€)")+'</div></div>'+
+ '<div class="col g8"><h3>Distance</h3><label class="fld"><span>Ma ville</span><select data-bind="f.ville" data-rr="count"><option value="">'+(S.geo?"Ma position":"Choisir une ville")+'</option>'+Object.keys(CITIES).map(function(c){return'<option'+(f.ville===c?" selected":"")+'>'+c+'</option>'}).join("")+'</select></label>'+num("ray","Rayon maximum autour de moi (km)","Ex. 100")+'</div>'+
+ '</div><div class="ft"><button type="button" class="link"'+A("f.reset")+'>Tout effacer</button><button type="button" class="btn"'+A("seeresults")+' id="seebtn">Voir '+results().length+' annonce'+(results().length>1?"s":"")+'</button></div></div>'}
+function oTrajet(){var t=S.trip;
+ function sel(k,l,first){return'<label class="fld soft"><span>'+l+'</span><select data-bind="trip.'+k+'"><option value="">'+first+'</option>'+(k==="from"&&S.geo?'<option value="__geo"'+(t.from==="__geo"?" selected":"")+'>Ma position</option>':'')+Object.keys(CITIES).map(function(c){return'<option'+(t[k]===c?" selected":"")+'>'+c+'</option>'}).join("")+'</select></label>'}
+ return'<div class="sheet" role="dialog" aria-modal="true" aria-label="Prévoir mon trajet">'+sheetHead("Prévoir mon trajet")+'<div class="bd" style="gap:12px">'+sel("from","Départ","Choisir…")+sel("to","Arrivée (concours, écurie…)","Choisir…")+
+ '<div class="grid2"><label class="fld soft"><span>Détour max. (km)</span><input type="number" min="0" inputmode="numeric" placeholder="20" value="'+esc(t.detour)+'" data-bind="trip.detour"></label><button type="button" class="btn ghost"'+A("open","filtres")+'>'+ic("filter",16,"#1E2430")+(fCount()?"Filtres ("+fCount()+")":"Mes filtres")+'</button></div>'+
+ '<button type="button" class="btn"'+A("applyroute")+'>'+ic("route",18,"#fff",2.2)+'Voir les chevaux sur ma route</button><span class="small mute" style="text-align:center">Chevaux à vendre le long du trajet, selon vos filtres et le détour choisi (20 km si vide).</span></div></div>'}
+function oOffer(){var o=S.offers.filter(function(x){return x.id===S.offerId})[0];if(!o)return oFiltres();var bk=S.booked.indexOf(o.id)>-1,k=road(CITIES[o.from],CITIES[o.to]);
+ return'<div class="sheet" role="dialog" aria-modal="true" aria-label="Transport proposé">'+sheetHead("Transport proposé")+'<div class="bd" style="gap:14px"><div class="col g4"><b style="font-size:20px">'+esc(o.from)+' → '+esc(o.to)+'</b><span class="mute">'+offerDate(o)+' · ≈ '+k+' km · '+dur(drive(CITIES[o.from],CITIES[o.to]))+' de route</span></div>'+
+ '<div class="grid2"><div class="col" style="background:var(--soft);border-radius:12px;padding:10px"><span class="xs mute" style="font-weight:600">Places libres</span><b>'+o.places+' cheva'+(o.places>1?"ux":"l")+'</b></div><div class="col" style="background:var(--soft);border-radius:12px;padding:10px"><span class="xs mute" style="font-weight:600">Véhicule</span><b>'+esc(o.veh)+'</b></div></div>'+
+ '<div class="row g12"><span class="icon soft" style="width:48px;height:48px">'+ic("truck",24,"#1E2430")+'</span><span class="col"><b>'+(o.mine?"Mon trajet":esc(o.who))+'</b><span class="small" style="color:var(--good);font-weight:700">'+ic("shield",13,"#1F5A3A",2.8)+' Identité vérifiée</span></span></div>'+
+ (o.note?'<p style="margin:0;color:#3A404C">'+esc(o.note)+'</p>':'')+'<span class="small mute">Participation : '+(o.prix?esc(o.prix)+" € par cheval":"à convenir avec le transporteur")+'</span>'+
+ '<span class="note">Le transport est un accord entre vous et la personne qui le propose. Le contrat de transport EquiRoyme peut être signé dans l’app.</span><a class="link" style="font-size:13px;align-self:flex-start;display:flex;align-items:center" href="'+URL_DOC.transport+'" target="_blank" rel="noopener">Lire le contrat de transport</a>'+
+ (o.mine?'<button type="button" class="btn ghost"'+A("offer.rm",o.id)+'>Retirer mon trajet</button>':bk?'<button type="button" class="btn ok"'+A("go","messages")+'>Place demandée · voir mes messages</button>':'<button type="button" class="btn" style="background:#2A5BB8"'+A("offer.book",o.id)+'>Demander une place</button>')+'</div></div>'}
+function oProposer(){var p=S.prop;function sel(k,l){return'<label class="fld soft"><span>'+l+'</span><select data-bind="prop.'+k+'"><option value="">Choisir une ville</option>'+Object.keys(CITIES).map(function(c){return'<option'+(p[k]===c?" selected":"")+'>'+c+'</option>'}).join("")+'</select></label>'}
+ return'<div class="sheet" role="dialog" aria-modal="true" aria-label="Proposer un transport">'+sheetHead("Proposer un transport")+'<div class="bd" style="gap:14px"><span class="small mute">Vous faites un trajet avec de la place dans votre van ou camion ? Proposez-la aux autres cavaliers.</span>'+sel("from","Départ")+sel("to","Arrivée")+
+ '<div class="grid2"><label class="fld"><span>Date</span><input type="date" value="'+esc(p.date)+'" data-bind="prop.date"></label><div class="fld" style="flex-direction:row;align-items:center;justify-content:space-between"><span class="col"><span>Places libres</span><b style="font-size:15px">'+p.places+'</b></span><span class="row" style="gap:4px"><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Une place de moins"'+A("prop.places","-1")+'>−</button><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Une place de plus"'+A("prop.places","1")+'>+</button></span></div></div>'+
+ '<div class="col g8"><b style="font-size:13px">Véhicule</b>'+seg([["Van","Van"],["Camion","Camion"],["Remorque","Remorque"]],p.veh,"prop.veh")+'</div>'+
+ '<label class="fld"><span>Participation par cheval (€, facultatif)</span><input type="number" min="0" placeholder="À convenir" value="'+esc(p.prix)+'" data-bind="prop.prix"></label>'+
+ '<label class="fld"><span>Message (facultatif)</span><textarea rows="3" placeholder="Ex. retour à vide après un concours, arrêt possible en route…" data-bind="prop.note">'+esc(p.note)+'</textarea></label>'+
+ '<button type="button" class="btn" style="background:#2A5BB8"'+A("prop.publish")+'>Publier mon trajet</button></div></div>'}
+function oEtape(){var p=PENS.filter(function(x){return x.id===S.etape})[0],e=S.et,tot=e.presta?p.pr[e.presta]*e.n*e.nights:null;
+ return'<div class="sheet" role="dialog" aria-modal="true" aria-label="Écurie étape">'+sheetHead("Écurie étape")+'<div class="bd" style="gap:14px"><div class="ph" style="height:120px;background:'+tint(p.id)+'">Photos de l’écurie</div><div class="col"><b style="font-size:18px">'+esc(p.nom)+'</b><span class="small mute">'+esc(p.ville)+' · Pension partenaire</span></div>'+
+ '<div class="grid3"><label class="fld" style="grid-column:span 3"><span>Arrivée</span><input type="date" data-bind="et.date" value="'+esc(e.date||"")+'"></label>'+[["n","Chevaux"],["nights","Nuits"]].map(function(x){return'<div class="fld" style="grid-column:span '+(x[0]==="n"?2:1)+';flex-direction:row;align-items:center;justify-content:space-between"><span class="col"><span>'+x[1]+'</span><b style="font-size:15px">'+e[x[0]]+'</b></span><span class="row" style="gap:4px"><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Moins"'+A("et."+x[0],"-1")+'>−</button><button type="button" class="icon soft" style="width:32px;height:32px" aria-label="Plus"'+A("et."+x[0],"1")+'>+</button></span></div>'}).join("")+'</div>'+
+ '<div class="col g8"><b>Prestation (prix par nuit et par cheval)</b>'+Object.keys(p.pr).map(function(k){var on=e.presta===k;return'<button type="button" aria-pressed="'+on+'"'+A("et.presta",k)+' class="row between" style="min-height:48px;padding:0 14px;border-radius:12px;font-weight:700;border:1px solid '+(on?"#1E2430":"#C9CDD3")+';background:'+(on?"#1E2430":"#fff")+';color:'+(on?"#fff":"#1E2430")+'"><span>'+PL[k]+'</span><span>'+eur(p.pr[k])+'</span></button>'}).join("")+'</div>'+
+ (tot!=null?'<div class="row between" style="background:var(--soft);border-radius:12px;padding:12px 14px"><span class="small" style="color:#3A404C">'+e.n+' cheva'+(e.n>1?"ux":"l")+' × '+e.nights+' nuit'+(e.nights>1?"s":"")+' × '+eur(p.pr[e.presta])+'</span><b>'+eur(tot)+'</b></div>':'')+
+ '<span class="note">Prix fixés par l’écurie. La réservation est un accord entre vous et l’écurie : EquiRoyme vous met en relation.</span><a class="link" style="font-size:13px;align-self:flex-start;display:flex;align-items:center" href="'+URL_DOC.pension+'" target="_blank" rel="noopener">Lire le contrat de pension</a>'+
+ (e.sent===p.id?'<button type="button" class="btn ok"'+A("go","messages")+'>Demande envoyée · voir mes messages</button>':'<button type="button" class="btn'+(e.presta?"":" off")+'"'+A("book")+'>'+(e.presta?"Demander une réservation":"Choisissez une prestation")+'</button>')+'</div></div>'}
+
+/* ---------- Rendu ---------- */
+var VIEWS={accueil:vAccueil,resultats:vResultats,annonce:vAnnonce,depot:vDepot,tournee:vTournee,etapes:vEtapes,messages:vMessages,favoris:vFavoris,profil:vProfil,premium:vPremium,transport:vTransport};
+function render(keepScroll){var y=window.scrollY,app=$("#app"),bd=$(".sheet .bd"),bs=bd?bd.scrollTop:0,prevOv=S._ov;
+ if(S.view==="auth"){app.innerHTML=vAuth()+(S._toast?'<div class="toast" role="status">'+esc(S._toast)+'</div>':'');app.style.paddingBottom="0";return}
+ if(!S.seen){app.innerHTML=vBienvenue();app.style.paddingBottom="0";return}
+ app.style.paddingBottom="";
+ var ov=S.overlay?'<div class="overlay"'+A("close")+'>'+({filtres:oFiltres,trajet:oTrajet,etape:oEtape,offer:oOffer,proposer:oProposer}[S.overlay])()+'</div>':'';
+ app.innerHTML=(VIEWS[S.view]||vAccueil)()+nav()+ov+(S._toast?'<div class="toast" role="status">'+esc(S._toast)+'</div>':'');
+ if(keepScroll)window.scrollTo(0,y);var nb=$(".sheet .bd");if(nb&&prevOv===S.overlay)nb.scrollTop=bs;S._ov=S.overlay;
+ document.body.style.overflow=S.overlay?"hidden":"";
+ save()}
+function go(v,keep){if(v!==S.view){S.hist.push(S.view);if(S.hist.length>30)S.hist.shift()}S.view=v;S.overlay=null;if(v!=="messages")S.conv=null;render();if(!keep)window.scrollTo(0,0)}
+function back(){var v=S.hist.pop()||"accueil";S.view=v;S.overlay=null;render();window.scrollTo(0,0)}
+function toggle(arr,v){var i=arr.indexOf(v);if(i>-1)arr.splice(i,1);else arr.push(v);return i<0}
+function setPath(path,v){var p=path.split("."),o=S;for(var i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=v}
+function getConv(kind,title,horse,icon){var c=S.convs.filter(function(x){return x.kind===kind&&x.title===title&&x.horse===horse})[0];if(!c){c={id:Date.now()+Math.floor(Math.random()*1000),kind:kind,title:title,horse:horse,icon:icon,unread:false,msgs:[]};S.convs.push(c)}return c}
+
+document.addEventListener("click",function(e){var el=e.target.closest("[data-act]");if(!el)return;var a=el.dataset.act,v=el.dataset.v;
+ if(a==="close"&&el.classList.contains("overlay")&&e.target!==el)return;
+ var n=v!=null&&/^-?\d+$/.test(v)?+v:v,h,i;
+ switch(a){
+ case"go":go(v);return;
+ case"back":back();return;
+ case"open":S.overlay=v;render(true);return;
+ case"close":S.overlay=null;render(true);return;
+ case"mapcat":S.mapCat=v;break;
+ case"horse":S.horse=n;S.media=0;go("annonce");return;
+ case"etape":S.etape=n;S.et={presta:null,n:S.et.n||1,nights:1,sent:S.et.sent};S.overlay="etape";render(true);return;
+ case"fav":var added=toggle(S.favs,n);toast(added?"Ajouté aux favoris":"Retiré des favoris");break;
+ case"media":S.media=n;break;
+ case"sort":S.sort=v;break;
+ case"geo":if(!navigator.geolocation){toast("Position indisponible : choisissez votre ville dans les filtres.");break}navigator.geolocation.getCurrentPosition(function(p){S.geo=[p.coords.latitude,p.coords.longitude];S.f.ville="";toast("Position trouvée");render(true)},function(){toast("Position refusée : choisissez votre ville dans les filtres.");render(true)});return;
+ case"f.type":S.f.type=v;break;case"f.sexe":S.f.sexe=v;break;case"f.deb":S.f.deb=v;break;case"f.epr":S.f.epr=v;break;
+ case"f.cat":S.f.cat=S.f.cat===v?"":v;break;case"f.disc":toggle(S.f.disc,v);break;
+ case"f.reset":S.f=freshFilters();break;
+ case"seeresults":go("resultats");return;
+ case"savealert":if(!S.premium){toast("Les alertes sont réservées aux membres Premium");go("premium");return}var lbl=[S.f.type==="location"?"Location":S.f.type==="tous"?"Achat et location":"Achat"].concat(S.f.disc,S.f.cat?[S.f.cat]:[],S.f.sexe?[S.f.sexe]:[],S.f.epr?["jusqu’à "+S.f.epr]:[],S.f.prixMax?["max "+eur(+S.f.prixMax)]:[],S.f.ray&&origin()?[S.f.ray+" km"]:[],S.route?["sur ma route"]:[]).join(" · ");S.alerts.push({id:Date.now(),label:lbl,on:true});toast("Alerte créée : vous serez prévenu par e-mail et notification");break;
+ case"applyroute":if(!S.trip.from||!S.trip.to){toast("Choisissez un départ et une arrivée");break}S.route={from:S.trip.from,to:S.trip.to,detour:S.trip.detour};S.overlay=null;S.mapCat="vente";go("accueil");return;
+ case"clearroute":S.route=null;break;
+ case"routeto":h=byId(n);var near=Object.keys(CITIES).sort(function(x,y){return hv(CITIES[x],COORD[h.id])-hv(CITIES[y],COORD[h.id])})[0];S.trip.to=near;S.overlay="trajet";render(true);toast("Arrivée la plus proche du cheval : "+near);return;
+ case"tour":h=byId(n);if(S.tour.some(function(t){return t.id===n})){S.tour=S.tour.filter(function(t){return t.id!==n});toast("Retiré de votre tournée")}else{S.tour.push({id:n,st:"brouillon",min:0});toast("Ajouté à votre tournée d’essais")}break;
+ case"transportfor":h=byId(n);S.tr.from=Object.keys(CITIES).sort(function(x,y){return hv(CITIES[x],COORD[h.id])-hv(CITIES[y],COORD[h.id])})[0];go("transport");return;
+ case"contact":h=byId(n);var c=getConv("achat",h.anon?"Vendeur anonyme":ECU[h.id],h.id);if(!c.msgs.length)c.msgs.push({who:"me",t:"Bonjour, "+h.nom+" est-il toujours disponible ? J’aimerais en savoir plus."});S.conv=c.id;go("messages");S.conv=c.id;render();return;
+ case"share":toast("Lien de l’annonce copié (simulation)");break;
+ case"report":toast("Merci, l’annonce sera vérifiée par EquiRoyme");break;
+ case"trial":S.premium=true;toast("Essai Premium activé pour 30 jours");break;
+ case"stoptrial":S.premium=false;toast("Essai Premium arrêté");break;
+ case"viewdoc":toast(v+" : ouverture du document (simulation)");break;
+ case"askdoc":S.asked=S.asked||[];if(S.asked.indexOf(S.horse+v)<0){S.asked.push(S.horse+v);h=byId(S.horse);var cc=getConv("achat",h.anon?"Vendeur anonyme":ECU[h.id],h.id);cc.msgs.push({who:"sys",t:"Demande de document envoyée : "+v});toast("Demande envoyée au vendeur")}break;
+ case"msgtab":S.msgTab=v;break;
+ case"openconv":S.conv=n;S.convs.forEach(function(x){if(x.id===n)x.unread=false});render();window.scrollTo(0,0);return;
+ case"closeconv":S.conv=null;break;
+ case"send":var inp=$("#draft");var txt=(inp?inp.value:S.draft).trim();var cv=S.convs.filter(function(x){return x.id===S.conv})[0];if(!txt||!cv)break;cv.msgs.push({who:"me",t:txt});S.draft="";render();window.scrollTo(0,document.body.scrollHeight);setTimeout(function(){var d=$("#draft");if(d)d.focus()},0);return;
+ case"review":if(S.reviewed.indexOf(n)<0)S.reviewed.push(n);toast("Merci ! Votre avis sera visible après la vente");break;
+ case"favtab":S.favTab=v;break;
+ case"ch.push":S.ch.push=!S.ch.push;break;case"ch.mail":S.ch.mail=!S.ch.mail;break;
+ case"alert.on":S.alerts.forEach(function(x){if(x.id===n)x.on=!x.on});break;
+ case"alert.rm":S.alerts=S.alerts.filter(function(x){return x.id!==n});break;
+ case"verify":S.verified=true;toast("Identité vérifiée (simulation)");break;
+ case"anondef":S.anonDef=!S.anonDef;break;case"phone":S.phone=!S.phone;break;
+ case"welcome":S.seen=false;break;
+ case"reset":try{localStorage.removeItem(KEY)}catch(x){}location.reload();return;
+ case"plan":S.plan=v;break;case"period":S.period=v;break;
+ case"pf":toggle(S.pf,v);break;
+ case"et.presta":S.et.presta=v;break;
+ case"et.n":S.et.n=Math.max(1,Math.min(12,S.et.n+n));break;case"et.nights":S.et.nights=Math.max(1,Math.min(14,S.et.nights+n));break;
+ case"book":if(!S.et.presta)break;var p=PENS.filter(function(x){return x.id===S.etape})[0];var cb=getConv("services",p.nom,null,"home");cb.about="Réservation · "+PL[S.et.presta];cb.msgs.push({who:"me",t:"Demande de réservation : "+PL[S.et.presta]+", "+S.et.n+" cheva"+(S.et.n>1?"ux":"l")+", "+S.et.nights+" nuit"+(S.et.nights>1?"s":"")+(S.et.date?", arrivée le "+S.et.date:"")+" · total estimé "+eur(p.pr[S.et.presta]*S.et.n*S.et.nights)+"."});S.et.sent=p.id;toast("Demande envoyée à l’écurie");break;
+ case"tr.n":S.tr.n=Math.max(1,Math.min(9,S.tr.n+n));break;
+ case"devis":if(S.tr.asked.indexOf(n)<0){S.tr.asked.push(n);var car=CARRIERS.filter(function(x){return x.id===n})[0];var ct=getConv("services",car.nom,null,"truck");ct.about="Devis transport";ct.msgs.push({who:"me",t:"Demande de devis : "+S.tr.n+" cheva"+(S.tr.n>1?"ux":"l")+(S.tr.from?", de "+S.tr.from:"")+(S.tr.to?" à "+S.tr.to:"")+(S.tr.date?", le "+S.tr.date:"")+"."});toast("Demande de devis envoyée")}break;
+ case"selfroute":S.trip.from=S.tr.from;S.trip.to=S.tr.to;S.overlay="trajet";render(true);return;
+ case"goal":S.goal=v;break;
+ case"start":S.seen=true;S.view="accueil";if(S.goal==="vendre"){S.view="depot"}render();window.scrollTo(0,0);return;
+ /* tournée */
+ case"TO":S.TO=v;break;
+ case"t.send":S.tour.forEach(function(x){if(x.st==="brouillon"){x.st="envoyé";var hh=byId(x.id),c2=getConv("achat",hh.anon?"Vendeur anonyme":ECU[hh.id],hh.id);c2.msgs.push({who:"sys",t:"Demande d’essai envoyée pour le "+S.TD})}});toast("Demandes envoyées : chaque vendeur reçoit une notification");break;
+ case"t.ok":var o=plan().out.filter(function(x){return x.s.id===n})[0];S.tour.forEach(function(x){if(x.id===n){x.min=o?o.st:0;x.st="accepté"}});toast("Rendez-vous confirmé");break;
+ case"t.no":S.tour.forEach(function(x){if(x.id===n)x.st="refusé"});toast("Essai refusé : l’itinéraire est recalculé");break;
+ case"t.ct":var o2=plan().out.filter(function(x){return x.s.id===n})[0];S.tour.forEach(function(x){if(x.id===n){x.st="contre";x.min=(o2?o2.st:0)+60}});toast("Le vendeur propose un autre horaire");break;
+ case"t.rm":S.tour=S.tour.filter(function(x){return x.id!==n});break;
+ case"t.up":case"t.dn":var ord=plan().out.map(function(x){return x.s});var k=ord.findIndex(function(x){return x.id===n}),j=k+(a==="t.up"?-1:1);if(j>=0&&j<ord.length){var t2=ord[k];ord[k]=ord[j];ord[j]=t2;S.tour=ord.concat(S.tour.filter(function(x){return x.st==="refusé"}))}break;
+ /* dépôt */
+ case"addphoto":S.dep.photos=n<S.dep.photos?n:n+1;break;
+ case"addvideo":S.dep.videos=n<S.dep.videos?n:n+1;break;
+ case"dep.loc":S.dep.loc=+v;break;case"dep.sexe":S.dep.sexe=S.dep.sexe===v?"":v;break;case"dep.niveau":S.dep.niveau=S.dep.niveau===v?"":v;break;case"dep.pmode":S.dep.pmode=v;break;
+ case"dep.disc":toggle(S.dep.disc,v);break;case"dep.cat":S.dep.cat=S.dep.cat===v?"":v;break;
+ case"dep.doc":if(S.dep.docs[v])delete S.dep.docs[v];else S.dep.docs[v]="pub";break;
+ case"dep.docmode":var pp=v.split("|");S.dep.docs[pp[1]]=pp[0];break;
+ case"dep.anon":S.dep.anon=!(S.dep.anon==null?S.anonDef:S.dep.anon);break;
+ case"dep.une":S.dep.une=!S.dep.une;if(S.dep.une&&!S.premium)toast("La mise à la une fait partie de Premium");break;
+ case"depreset":S.dep=freshDep();break;
+ case"publish":var d=S.dep,id=Math.max.apply(null,H.map(function(x){return x.id}))+1;
+  var nh={id:id,nom:d.nom.trim()||"Cheval sans nom",cat:d.cat,prix:d.pmode==="demande"||d.prix===""?null:+d.prix,pmode:d.pmode,age:d.age===""?null:+d.age,taille:d.taille===""?null:+d.taille,deb:null,epr:d.niveau,sexe:d.sexe,loc:d.loc?1:0,ville:d.ville?d.ville:"",race:d.race,disc:d.disc[0]||"",sp:d.une?1:0,anon:(d.anon==null?S.anonDef:d.anon)?1:0,mine:true,desc:d.desc.trim(),docs:Object.keys(d.docs).map(function(t){return{t:t,s:"Ajouté par le vendeur",pub:d.docs[t]==="pub"?1:0}})};
+  var co=d.ville?[CITIES[d.ville][0]+0.05,CITIES[d.ville][1]+0.05]:null;H.push(nh);if(co)COORD[id]=co;ECU[id]="Mon écurie";S.mine.push({h:nh,c:co});S.dep=freshDep();S.horse=id;S.media=0;toast("Annonce publiée");go("annonce");return;
+ case"offer":S.offerId=n;S.overlay="offer";render(true);return;
+ case"offer.book":var of=S.offers.filter(function(x){return x.id===n})[0];if(S.booked.indexOf(n)<0){S.booked.push(n);var co2=getConv("services",of.who+" · "+of.from+" → "+of.to,null,"truck");co2.about="Transport proposé";co2.msgs.push({who:"me",t:"Bonjour, je souhaiterais une place pour 1 cheval sur votre trajet "+of.from+" → "+of.to+" ("+offerDate(of)+")."});toast("Demande envoyée")}break;
+ case"offer.rm":S.offers=S.offers.filter(function(x){return x.id!==n});S.overlay=null;toast("Trajet retiré");break;
+ case"prop.places":S.prop.places=Math.max(1,Math.min(9,S.prop.places+n));break;
+ case"prop.veh":S.prop.veh=v;break;
+ case"prop.publish":var pr=S.prop;if(!pr.from||!pr.to||pr.from===pr.to){toast("Choisissez un départ et une arrivée différents");break}S.offers.push({id:Date.now(),who:"Moi",mine:true,from:pr.from,to:pr.to,date:pr.date,places:pr.places,veh:pr.veh,prix:pr.prix,note:pr.note.trim()});S.prop=freshProp();S.overlay=null;S.mapCat="transport";toast("Votre trajet est publié");if(S.view!=="accueil"){go("accueil");return}break;
+ case"auth":AUTH={mode:v,msg:"",err:"",busy:false,email:AUTH.email,prenom:AUTH.prenom};if(S.view!=="auth"){S.authFrom=S.view;S.view="auth"}render();window.scrollTo(0,0);return;
+ case"auth.back":S.view=S.seen?(S.authFrom&&S.authFrom!=="auth"?S.authFrom:"profil"):"accueil";render();return;
+ case"logout":if(sb)sb.auth.signOut().then(function(){USER=null;toast("Vous êtes déconnecté");render(true)});return;
+ default:return}
+ render(true)});
+document.addEventListener("keydown",function(e){var g=e.target.closest&&e.target.closest("g.pin");if(g&&(e.key==="Enter"||e.key===" ")){e.preventDefault();g.dispatchEvent(new MouseEvent("click",{bubbles:true}))}if(e.key==="Escape"&&S.overlay){S.overlay=null;render(true)}if(e.key==="Enter"&&e.target.id==="draft"){e.preventDefault();var s=$('[data-act="send"]');if(s)s.click()}});
+function bind(e){var el=e.target,b=el.dataset&&el.dataset.bind;if(!b)return;var v=el.value;if(b==="KM")v=Math.max(0,+v||0);if(b==="TT")v=v||"08:00";setPath(b,v);
+ if(el.dataset.rr==="count"){var sb=$("#seebtn");if(sb){var c=results().length;sb.textContent="Voir "+c+" annonce"+(c>1?"s":"")}save()}
+ else if(el.dataset.rr&&e.type==="change")render(true);else save()}
+document.addEventListener("input",bind);document.addEventListener("change",bind);
+render();
+if("serviceWorker" in navigator&&location.protocol==="https:"){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})})}
+</script>
+</body>
+</html>
